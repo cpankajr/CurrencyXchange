@@ -65,15 +65,15 @@
                       	<div class="col s12">
                       		From                      		
 		                  	<select id="convert-from-currency-code">
-		                  		<option value="USD">USD</option>
-		                  		<option value="INR">INR</option>
-		                  		<option value="GBP">GBP</option>
+		                  		{% for currency in SUPPORTED_CURRENCIES %}
+      								<option value="{{currency}}" selected="">{{currency}}</option>
+      							{% endfor %}
 		                  	</select>
 		                  	To
 		                  	<select id="convert-to-currency-code">
-		                  		<option value="USD">USD</option>
-		                  		<option value="INR">INR</option>
-		                  		<option value="GBP">GBP</option>
+      		    				{% for currency in SUPPORTED_CURRENCIES %}
+      								<option value="{{currency}}" selected="">{{currency}}</option>
+      							{% endfor %}
 		                  	</select>
                       	</div>
                       </div>
@@ -234,9 +234,9 @@
     		<div class="col s12">
     			<p>Select Currency Code for Wallet</p>
     			<select id="create-wallet-currency-type">
-					<option value="usd" selected="">USD</option>
-					<option value="inr">INR</option>
-					<option value="gbp">GBP</option>
+    				{% for currency in SUPPORTED_CURRENCIES %}
+						<option value="{{currency}}" selected="">{{currency}}</option>
+					{% endfor %}
     			</select>
     		</div>
     		<br>

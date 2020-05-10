@@ -23,6 +23,41 @@ from CurrencyExngApp.utils import *
 
 logger = logging.getLogger(__name__)
 
+SUPPORTED_CURRENCIES =["EUR",
+                    "IDR",
+                    "BGN",
+                    "ILS",
+                    "GBP",
+                    "DKK",
+                    "CAD",
+                    "JPY",
+                    "HUF",
+                    "RON",
+                    "MYR",
+                    "SEK",
+                    "SGD",
+                    "HKD",
+                    "AUD",
+                    "CHF",
+                    "KRW"
+                    "CNY",
+                    "TRY",
+                    "HRK",
+                    "NZD",
+                    "THB",
+                    "USD",
+                    "NOK",
+                    "RUB",
+                    "INR",
+                    "MXN",
+                    "CZK",
+                    "BRL",
+                    "PLN",
+                    "PHP",
+                    "ZAR"]
+
+
+
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
 
@@ -40,7 +75,8 @@ def HomePage(request):
         print(transaction_objs)
         return render(request, 'CurrencyExngApp/home.html',{
             "wallet_obj":wallet_obj,
-            "transaction_objs":transaction_objs.order_by("-pk")
+            "transaction_objs":transaction_objs.order_by("-pk"),
+            "SUPPORTED_CURRENCIES":SUPPORTED_CURRENCIES
             })
     else:
         return HttpResponseRedirect("/login")
@@ -308,20 +344,22 @@ class SaveProfileAPI(APIView):
             emailid = removeHtmlFromString(emailid)
 
             image_data = data['image_data']
-            image_data = removeHtmlFromString(image_data)
 
-            file_path = save_image(image_data)
-            if file_path is None:
-                response['status'] = 301
-            else:
-                user_obj = User.objects.get(username=username)
-                user_obj.first_name = first_name
-                user_obj.last_name = last_name
-                user_obj.email = emailid
-                user_obj.profile_image = file_path
-                user_obj.save()
+            user_obj = User.objects.get(username=username)
+            if image_data!="":
+                file_path = save_image(image_data)
 
-                response['status'] = 200
+                if file_path is None:
+                    response['status'] = 301
+                else:
+                    user_obj.profile_image = file_path
+
+            user_obj.first_name = first_name
+            user_obj.last_name = last_name
+            user_obj.email = emailid
+            user_obj.save()
+
+            response['status'] = 200
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("SaveProfileAPI: %s at %s", e, str(exc_tb.tb_lineno))

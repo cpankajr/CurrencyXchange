@@ -18,14 +18,14 @@
 	    <tr>
 	    	{% if request.user.profile_image %}
 	        	<td style="width: 70%">
-	            	<img id="profile-pic" src="{{request.user.profile_image.url}}" style="width: 200px; height: 200px" />
+	            	<img id="profile-pic" src="{{request.user.profile_image.url}}" style="max-width: 200px; max-height: 200px" />
 	        	</td>
 	        	<td style="width: 30%">
 	        		<a href="#modal-upload-profile-image" class="btn white black-text modal-trigger">Change Profile Pic</a>
 	        	</td>
 	        {% else %}
 	        	<td style="width: 70%">
-	            	<img id="profile-pic" src="" style="width: 200px; height: 200px"/>
+	            	<img id="profile-pic" src="" style="max-width: 200px; max-height: 200px"/>
 	        	</td>
 	        	<td style="width: 30%">
 	        		<a href="#modal-upload-profile-image" class="btn white black-text modal-trigger">Upload Profile Pic</a>

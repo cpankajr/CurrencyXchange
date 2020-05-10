@@ -1,1 +1,2 @@
-[10-May-2020 15:46:53] ERROR [CurrencyExngApp.views:241] SendMoneyAPI: name 'recieved_user' is not defined at 232
+[10-May-2020 18:10:27] ERROR [CurrencyExngApp.views:327] SaveProfileAPI: expected string or bytes-like object at 311
+[10-May-2020 18:14:20] ERROR [CurrencyExngApp.views:327] SaveProfileAPI: 'str' object has no attribute 'name' at 313

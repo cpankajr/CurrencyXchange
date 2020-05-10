@@ -32,7 +32,6 @@ def save_image(image_data):
 	if file_extention in ["png", "jpg", "jpeg", "svg", "bmp", "gif", "tiff", "exif", "jfif"]:
 		path = default_storage.save(
 	    	image_data.name.replace(" ", ""), ContentFile(image_data.read()))
-		return "/files/"+path
+		return path
 	else:
 		return None
-
