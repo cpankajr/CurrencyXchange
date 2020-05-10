@@ -23,38 +23,7 @@ from CurrencyExngApp.utils import *
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_CURRENCIES =["EUR",
-                    "IDR",
-                    "BGN",
-                    "ILS",
-                    "GBP",
-                    "DKK",
-                    "CAD",
-                    "JPY",
-                    "HUF",
-                    "RON",
-                    "MYR",
-                    "SEK",
-                    "SGD",
-                    "HKD",
-                    "AUD",
-                    "CHF",
-                    "KRW"
-                    "CNY",
-                    "TRY",
-                    "HRK",
-                    "NZD",
-                    "THB",
-                    "USD",
-                    "NOK",
-                    "RUB",
-                    "INR",
-                    "MXN",
-                    "CZK",
-                    "BRL",
-                    "PLN",
-                    "PHP",
-                    "ZAR"]
+SUPPORTED_CURRENCIES =['EUR (€)', 'IDR (Rp)', 'BGN (BGN)', 'ILS (₪)', 'GBP (£)', 'DKK (Kr)', 'CAD ($)', 'JPY (¥)', 'HUF (Ft)', 'RON (L)', 'MYR (RM)', 'SEK (kr)', 'SGD (S$)', 'HKD (HK$)', 'AUD ($)', 'CHF (Fr.)', 'TRY (TRY)', 'HRK (kn)', 'NZD (NZ$)', 'THB (฿)', 'USD (US$)', 'NOK (kr)', 'RUB (R)', 'INR (₹)', 'MXN ($)', 'CZK (Kč)', 'BRL (R$)', 'PLN (zł)', 'PHP (₱)', 'ZAR (R)']
 
 
 
