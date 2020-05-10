@@ -1,0 +1,4 @@
+[09-May-2020 22:15:40] ERROR [CurrencyExngApp.views:86] LoginSubmitAPI: 'AnonymousUser' object has no attribute '_meta' at 80
+[09-May-2020 22:17:47] ERROR [CurrencyExngApp.views:86] LoginSubmitAPI: JSON parse error - Expecting value: line 1 column 1 (char 0) at 71
+[10-May-2020 09:44:10] ERROR [CurrencyExngApp.views:117] SignUpAPI: JSON parse error - Expecting value: line 1 column 1 (char 0) at 104
+[10-May-2020 09:45:37] ERROR [CurrencyExngApp.views:117] SignUpAPI: JSON parse error - Expecting value: line 1 column 1 (char 0) at 104

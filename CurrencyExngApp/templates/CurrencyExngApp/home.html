@@ -1,0 +1,156 @@
+{% extends 'CurrencyExngApp/base.html' %}
+{% block content %}
+{% load static %}
+<div class="row">
+	<div class="col s12 m6 l6">
+		<div class="row clearfix">
+            <div class="col s12 m12 l12">
+                <div class="card">
+                    <div class="header">
+                    	<div class="row clearfix">
+	                        <div class="col s3 m3 l3">
+	                            <h2>Wallet-Balance</h2>
+	                        </div>
+	                        <div class="col s9 m9 l9">
+	                        	<a href="#modal-wallet-analytics-settings" class="btn right modal-trigger white black-text" style="margin-left: 10px">Send Money</a>
+	                        	<a href="#modal-wallet-analytics-settings" class="btn right modal-trigger white black-text" style="margin-left: 10px">Add Money</a>
+	                        	<a href="#modal-wallet-analytics-settings" class="btn right modal-trigger white black-text"><i class="material-icons">add</i></a>
+	                        </div>                    		
+                    	</div>
+                    </div>
+                    <div class="body">
+                      <div class="row" style="text-align: center;
+						font-size: -webkit-xxx-large;
+						margin: auto;
+						top: 50%;
+						transform: translateY(50%);
+						">
+                        $2234567.45556
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+	<div class="col s12 m6 l6">
+		<div class="row clearfix">
+            <div class="col s12 m12 l12">
+                <div class="card">
+                    <div class="header">
+                    	<div class="row clearfix">
+	                        <div class="col s3 offset-s5 m3 offset-m5 l3 offset-l5">
+	                            <h2>Currency Conversion</h2>
+	                        </div>                   		
+                    	</div>
+                    </div>
+                    <div class="body">
+                      <div class="row">
+                      	<div class="col s12">                      		
+		                  	Amount
+		                    <input type="number" name="" style="
+		                        border-radius: 25px;
+		                        width: 40%;
+		                        margin-left: 20px;
+		                        padding: 0 25px;
+		                        border: black solid 1px;
+		                    ">
+                      	</div>
+                      	<div class="col s12">
+                      		From                      		
+		                  	<select>
+		                  		<option value="">USD</option>
+		                  		<option value="">USD</option>
+		                  		<option value="">USD</option>
+		                  		<option value="">USD</option>
+		                  	</select>
+		                  	To
+		                  	<select>
+		                  		<option value="">USD</option>
+		                  		<option value="">USD</option>
+		                  		<option value="">USD</option>
+		                  		<option value="">USD</option>
+		                  	</select>
+                      	</div>
+                      </div>
+                      <div class="row">
+                        <div class="col s6 l6 m6 offset-m3 offset-l3 offset-s3">
+                          <a href="javascript:void(0)" class="btn col s12" style="border-radius:1em;" id="convert-currency-btn" >Convert</a>                      
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+<div class="row">
+	<div class="col s12">
+		<div class="row clearfix">
+            <div class="col s12 m12 l12">
+                <div class="card">
+                    <div class="header">
+                    	<div class="row clearfix">
+	                        <div class="col s3 m3 l3">
+	                            <h2>Recent Transactions</h2>
+	                        </div>
+	                        <div class="col s9 m9 l9">	
+	                        </div>                    		
+                    	</div>
+                    </div>
+                    <div class="body">
+                      <div class="row" style="text-align: center;">
+                      	<div class="col s4" style="font-weight: bolder;">
+                      		Description
+                      	</div>
+                      	<div class="col s4" style="font-weight: bolder;">
+                      		Ammount
+                      	</div>
+                      	<div class="col s4" style="font-weight: bolder;">
+                      		Receipt
+                      	</div>
+                      	<br>
+                      	<hr>
+                      	<div class="col s4">
+                      		Sent Money to: avc
+                      	</div>
+                      	<div class="col s4">
+                      		$5000
+                      	</div>
+                      	<div class="col s4">
+                      		<i class="material-icons red-text">picture_as_pdf</i>
+                      	</div>
+                      	<br>
+                      	<hr>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+<div class="row">
+	<div class="col s12">
+		<div class="row clearfix">
+            <div class="col s12 m12 l12">
+                <div class="card">
+                    <div class="header">
+                    	<div class="row clearfix">
+	                        <div class="col s3 m3 l3">
+	                            <h2>Wallet Analytics</h2>
+	                        </div>
+	                        <div class="col s9 m9 l9">
+                        		<a href="#modal-message-analytics-settings" class="btn right modal-trigger white black-text"><i class="material-icons">filter_list</i></a>
+	                        </div>                    		
+                    	</div>
+                    </div>
+                    <div class="body">
+                      <div class="row">
+                        <canvas id="wallet-analytics"></canvas>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+	</div>
+</div>
+{% endblock %}

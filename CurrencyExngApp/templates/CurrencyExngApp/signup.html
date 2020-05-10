@@ -1,0 +1,78 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="en" data-textdirection="ltr">
+  <head>
+    <title> Currency Currency Exchange App | Signup</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'CurrencyExngApp/css/external-css/material_icons.css' %}" 
+    media="screen,projection">
+    <link rel="stylesheet" type="text/css" href="{% static 'CurrencyExngApp/css/external-css/materialize.min.css' %}"  
+    media="screen,projection">
+    <link rel="stylesheet" type="text/css" href="{% static 'CurrencyExngApp/css/style.css' %}"
+    media="screen,projection">
+    <script type="text/javascript" src="{% static 'CurrencyExngApp/js/external-js/jquery.js' %}">
+    </script>
+  </head>
+  <body>
+      {% csrf_token %}
+      <div id="global-preloader"></div>
+      <div class="row" style="position: relative;height: 100vh">
+        <div class="col s12" style="top: 50%;transform: translateY(-50%);-ms-transform: translateY(-50%);position: absolute;">
+          <div class="container">
+
+
+            <div class="row">
+              <div class="col s12 m6 offset-m3 l6 offset-l3 z-depth-4 card-panel border-radius-6" style="padding:1em 2em 0em 2em;opacity:0.9;">
+                  <div class="row">
+                      <div class="input-field col s12" style="border-bottom:0.1em solid black;">
+                        <h5>Register</h5>                        
+                      </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <i class="material-icons prefix">person</i>
+                      <input id="register-username" type="text" class="validate" autocomplete="off">
+                      <label for="register-username">Username</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <i class="material-icons prefix">lock_outline</i>
+                      <input id="register-password" type="password" class="validate">
+                      <label for="register-password">Password</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12">
+                      <i class="material-icons prefix">lock_outline</i>
+                      <input id="register-retype-password" type="password" class="validate">
+                      <label for="register-retype-password">Re-type Password</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col s6 l6 m6 offset-m3 offset-l3 offset-s3">
+                      <a href="javascript:void(0)" class="btn col s12" style="border-radius:1em;" id="register-btn" >Register</a>                      
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="input-field col s12 center">
+                      <p><a href="javascript:void(0)" class="black-text text-darken-3">&#9400;&nbsp;&nbsp;Currency Exchange and Analytics application</a></p>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </body>
+
+  <script type="text/javascript" src="{% static 'CurrencyExngApp/js/external-js/materialize.min.js' %}">
+  </script>
+  <script type="text/javascript" src="{% static 'CurrencyExngApp/js/init.js' %}"></script>
+
+</html>
