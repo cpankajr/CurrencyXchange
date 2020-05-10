@@ -38,7 +38,7 @@ class Wallet(models.Model):
     user = models.ForeignKey(User, null=True, blank=True,
                              on_delete=models.CASCADE)
 
-    currency = models.CharField(max_length=500)
+    currency_code = models.CharField(max_length=500)
 
     ammount = models.FloatField(default=0.0)
 
@@ -52,14 +52,14 @@ class Transaction(models.Model):
     sent_user = models.ForeignKey(User, null=True, blank=True,
                             on_delete=models.CASCADE, related_name="sending_user")
 
-    sent_curr = models.CharField(max_length=500)
+    sent_curr_code = models.CharField(max_length=500)
 
     sent_ammount = models.FloatField(default=0.0)
 
     recieved_user = models.ForeignKey(User, null=True, blank=True,
                             on_delete=models.CASCADE, related_name="receiving_user")
 
-    recieved_curr = models.CharField(max_length=500)
+    recieved_curr_code = models.CharField(max_length=500)
 
     recieved_ammount = models.FloatField(default=0.0)
 
