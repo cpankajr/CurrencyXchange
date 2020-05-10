@@ -9,4 +9,5 @@ urlpatterns = [
     url(r'^register/', views.SignUp),  # Authentication
 
     url(r'^home/', views.HomePage), #Home Page
+    url(r'^profile/', views.Profile), #Profile Page
 ]

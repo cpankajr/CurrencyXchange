@@ -39,18 +39,23 @@ def HomePage(request):
     else:
         return HttpResponseRedirect("/login")
 
-def LoginPage(request):  # noqa: N802
+def LoginPage(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect("/home")
     else:
         return render(request, 'CurrencyExngApp/login.html')
 
-def SignupPage(request):  # noqa: N802
+def SignupPage(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect("/home")
     else:
         return render(request, 'CurrencyExngApp/signup.html')
 
+def Profile(request):
+    if request.user.is_authenticated():
+        return render(request, 'CurrencyExngApp/profile.html')
+    else:
+        return HttpResponseRedirect("/login")
 
 def Logout(request):  # noqa: N802
     if request.user.is_authenticated():

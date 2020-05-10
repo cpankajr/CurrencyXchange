@@ -1,4 +1,53 @@
 {% extends 'CurrencyExngApp/base.html' %}
 {% block content %}
 {% load static %}
+<div>
+	<div class="col s4 m4 l4 offset-s5 offset-m5 offset-l5 ">
+	    <h3>Profile Details</h3>
+	</div>
+</div>
+<style type="text/css">
+	td{
+		text-align: center;
+		 width: 50%
+	}
+</style>
+<br>
+<div style="padding: 0 100px">
+	<table>
+	    <tr>
+	        <td style="width: 70%">
+	            <img src="blah"/>
+	        </td>
+	        <td style="width: 70%">
+	        	<a href="javascript:void(0)" class="btn white black-text">Upload Profile Pic</a>
+	        </td>
+	    </tr>
+	</table>
+	<table>
+	    <tr>
+	        <td>Username</td>
+	        <td>{{ request.user.username }}</td>
+	    </tr>
+	    <tr>
+	        <td>First Name</td>
+	        <td><input type="text" name=""></td>
+	    </tr>
+	    <tr>
+	        <td>Last Name</td>
+	        <td><input type="text" name=""></td>
+	    </tr>
+	    <tr>
+	        <td>Email ID</td>
+	        <td><input type="text" name=""></td>
+	    </tr>
+	</table>
+</div>
+<br>
+<div class="row">
+  <div class="col s4 l4 m4 offset-m4 offset-l4 offset-s4">
+    <a href="javascript:void(0)" class="btn col s12" style="border-radius:1em;">Save	</a>                      
+  </div>
+</div>
+
 {% endblock %}
