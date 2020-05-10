@@ -204,11 +204,31 @@ class SendMoneyAPI(APIView):
 
             amount = data['amount']
             password = removeHtmlFromString(password)
-            if len(User.objects.filter(username= username))>0:
-                response['status'] = 301
+            if len(User.objects.filter(username= to_username))>0:
+
+                sending_user = User.objects.get(username=from_username)
+                recieving_user = User.objects.get(username=to_username)
+                
+                sending_wallet_obj = Wallet.objects.get(user=sending_user)
+                recieving_wallet_obj = Wallet.objects.get(user=recieving_user)
+
+                if float(amount)>sending_wallet_obj.amount:
+                    response['status'] = 302
+                else:
+                    
+                    from_currency_code = sending_wallet_obj.currency_code
+                    to_currency_code = recieving_wallet_obj.currency_code
+
+                    converted_amount = currency_convert(from_currency_code,to_currency_code,amount)
+
+                    sending_wallet_obj.amount = sending_wallet_obj.amount - amount
+                    recieving_wallet_obj = recieving_wallet_obj + converted_amount
+
+                    sending_wallet_obj.save()
+                    recieving_wallet_obj.save()
+                    response['status'] = 200
             else:    
-                User.objects.create(username= username, password=password)
-                response['status'] = 200
+                response['status'] = 301
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("SendMoneyAPI: %s at %s", e, str(exc_tb.tb_lineno))
@@ -230,13 +250,16 @@ class AddMoneyAPI(APIView):
 
             username = data['username']
             username = removeHtmlFromString(username)
-            password = data['password']
-            password = removeHtmlFromString(password)
-            if len(User.objects.filter(username= username))>0:
-                response['status'] = 301
-            else:    
-                User.objects.create(username= username, password=password)
-                response['status'] = 200
+
+            amount = data['amount']
+            amount = removeHtmlFromString(amount)
+            
+            user = User.objects.get(username=username)
+
+            wallet_obj = Wallet.objects.get(user=user)
+            wallet_obj.amount = wallet_obj.amount + amount
+            wallet_obj.save()
+            response['status'] = 200
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("AddMoneyAPI: %s at %s", e, str(exc_tb.tb_lineno))
