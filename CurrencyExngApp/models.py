@@ -22,7 +22,6 @@ class User(AbstractUser):
             self.set_password(self.password)
         elif not self.password.startswith("pbkdf2_sha256$36000$"):
             self.set_password(self.password)
-
         super(User, self).save(*args, **kwargs)
 
     class Meta:
