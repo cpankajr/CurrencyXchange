@@ -332,7 +332,7 @@ function convert_currency() {
         },
         success: function(response) {
             if (response["status"] == 200) {
-            	html = '<div class="col s6 l6 m6 offset-m3 offset-l3 offset-s3"><p> '+from_currency_code.toUpperCase()+amount+' = '+to_currency_code.toUpperCase()+response['converted_amount']+'</p></div>'
+            	html = '<div class="col s12 l12 m12"><h5> '+from_currency_code.toUpperCase()+" "+amount+' = '+to_currency_code.toUpperCase()+" "+response['converted_amount']+'</h5></div>'
             	document.getElementById("converted-currency-div").innerHTML = html
             	document.getElementById("converted-currency-div").style.display = 'block'
             }
@@ -346,3 +346,47 @@ function convert_currency() {
     });
 };
 
+$(document).on("click", "#upload-profile-image", function(e) {
+    e.preventDefault();
+    var output = document.getElementById('profile-pic');
+    output.src = URL.createObjectURL($("#input-upload-profile-image")[0].files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
+    }
+});
+
+function save_profile_data() {
+	username = document.getElementById("loggin-username").innerHTML;
+	first_name = document.getElementById("profile-first-name").value;
+	last_name = document.getElementById("profile-last-name").value;
+	emailid = document.getElementById("profile-emailid").value;
+    var image_data = ($("#input-upload-profile-image"))[0].files[0]
+    var formData = new FormData();
+    var CSRF_TOKEN = $('input[name="csrfmiddlewaretoken"]').val();
+    formData.append("username", username);
+    formData.append("first_name", first_name);
+    formData.append("last_name", last_name);
+    formData.append("image_data", image_data);
+    formData.append("emailid", emailid);
+
+    $.ajax({
+        url: "/save-profile/",
+        type: "POST",
+        headers: {
+            'X-CSRFToken': CSRF_TOKEN
+        },
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            if (response["status"] == 200) {
+                
+            }
+            else {
+                M.toast({
+                    "html": "Error occuerd while processing your request"
+                }, 2000)
+            }
+        }
+    });
+}

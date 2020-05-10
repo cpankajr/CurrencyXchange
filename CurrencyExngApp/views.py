@@ -3,16 +3,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication   # noqa F401
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
-from django.utils.encoding import smart_str
-# from django.utils.safestring import mark_safe
-
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, HttpResponse, \
     HttpResponseRedirect
-from django.contrib.auth.hashers import make_password
-from django.views.decorators.clickjacking import xframe_options_exempt
+from django.db.models import Q
+
 
 import json
 import datetime
@@ -35,7 +31,17 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
 
 def HomePage(request):
     if request.user.is_authenticated():
-        return render(request, 'CurrencyExngApp/home.html')
+        wallet_objs = Wallet.objects.filter(user=request.user)
+        if len(wallet_objs)>0:
+            wallet_obj = wallet_objs[0]
+        else:
+            wallet_obj = None
+        transaction_objs = Transaction.objects.filter(Q(sent_user=request.user)| Q(recieved_user=request.user))
+        print(transaction_objs)
+        return render(request, 'CurrencyExngApp/home.html',{
+            "wallet_obj":wallet_obj,
+            "transaction_objs":transaction_objs.order_by("-pk")
+            })
     else:
         return HttpResponseRedirect("/login")
 
@@ -298,6 +304,9 @@ class SaveProfileAPI(APIView):
             last_name = data['last_name']
             last_name = removeHtmlFromString(last_name)
 
+            emailid = data['emailid']
+            emailid = removeHtmlFromString(emailid)
+
             image_data = data['image_data']
             image_data = removeHtmlFromString(image_data)
 
@@ -305,7 +314,13 @@ class SaveProfileAPI(APIView):
             if file_path is None:
                 response['status'] = 301
             else:
-                response['file_path'] = file_path
+                user_obj = User.objects.get(username=username)
+                user_obj.first_name = first_name
+                user_obj.last_name = last_name
+                user_obj.email = emailid
+                user_obj.profile_image = file_path
+                user_obj.save()
+
                 response['status'] = 200
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()

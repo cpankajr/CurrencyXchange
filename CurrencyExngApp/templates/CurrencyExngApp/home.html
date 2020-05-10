@@ -12,9 +12,12 @@
 	                            <h2>Wallet-Balance</h2>
 	                        </div>
 	                        <div class="col s9 m9 l9">
+	                        	{% if wallet_obj %}
 	                        	<a href="#modal-send-money-wallet" class="btn right modal-trigger white black-text" style="margin-left: 10px">Send Money</a>
 	                        	<a href="#modal-add-money-wallet" class="btn right modal-trigger white black-text" style="margin-left: 10px">Add Money</a>
+	                        	{% else %}
 	                        	<a href="#modal-create-wallet" class="btn right modal-trigger white black-text"><i class="material-icons">add</i></a>
+	                        	{% endif%}
 	                        </div>                    		
                     	</div>
                     </div>
@@ -25,7 +28,11 @@
 						top: 50%;
 						transform: translateY(50%);
 						">
-                        $2234567.45556
+						{% if wallet_obj %}
+							{{wallet_obj.get_amount_string}}
+						{% else %}
+							Create Wallet
+                        {% endif %}
                       </div>
                     </div>
                 </div>
@@ -76,7 +83,7 @@
                         </div>
                       </div>
 
-                      <div class="row" style="display: none;" id="converted-currency-div">
+                      <div class="row" style="display: none; text-align: center;" id="converted-currency-div">
                       </div>
                     </div>
                 </div>
@@ -111,17 +118,43 @@
                       	</div>
                       	<br>
                       	<hr>
-                      	<div class="col s4">
-                      		Sent Money to: avc
-                      	</div>
-                      	<div class="col s4">
-                      		$5000
-                      	</div>
-                      	<div class="col s4">
-                      		<i class="material-icons red-text">picture_as_pdf</i>
-                      	</div>
-                      	<br>
-                      	<hr>
+                      	{% if transaction_objs %}
+                      		{% for transaction_obj in transaction_objs %}
+                      			{% if transaction_obj.recieved_user is None %}
+			                      	<div class="col s4">
+			                      		Money added to Wallet
+			                      	</div>
+			                    {% else %}
+			                    	{% if transaction_obj.recieved_user == request.user %}
+			                    		<div class="col s4">
+			                      			Money recieved from {{transaction_obj.sent_user.username}}
+			                      		</div>
+			                      	{% else %}
+				                    	<div class="col s4">
+				                      		Money sent to {{transaction_obj.recieved_user.username}}
+				                      	</div>
+				                    {% endif %}
+			                    {% endif %}
+			                    {% if transaction_obj.recieved_user == request.user %}
+			                      	<div class="col s4">
+			                      		{{transaction_obj.get_recieved_amount_string}}
+			                      	</div>
+			                    {% else %}
+			                    	<div class="col s4">
+			                      		{{transaction_obj.get_sent_amount_string}}
+			                      	</div>
+			                    {% endif %}
+		                      	<div class="col s4">
+		                      		<i class="material-icons red-text">picture_as_pdf</i>
+		                      	</div>
+		                      	<br>
+		                      	<hr>
+		                    {% endfor %}
+                      	{% else %}
+		                    <div class="col s12">
+	                      		No Transaction available.
+	                      	</div>
+	                    {% endif %}
                       </div>
                     </div>
                 </div>
@@ -161,7 +194,7 @@
     		<h6>Add Money to Wallet</h6>
     		<hr>
     		<div class="col s12">
-    			<p>Amount</p>
+    			<p>Amount (in {{wallet_obj.get_currency_symbol}})</p>
     			<input type="number" name="" id="add-money-amount">
     		</div>
     		<br>
@@ -181,7 +214,7 @@
     		<div class="col s12">
     			<p>User</p>
     			<input type="text" name="" id="send-money-to-username">
-    			<p>Amount</p>
+    			<p>Amount (in {{wallet_obj.get_currency_symbol}})</p>
     			<input type="number" name="" id="send-money-amount">
     		</div>
     		<br>

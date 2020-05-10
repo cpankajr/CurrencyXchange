@@ -12,6 +12,8 @@ import sys
 import json
 import logging
 
+from CurrencyExngApp.utils import *
+
 
 class User(AbstractUser):
 
@@ -42,6 +44,20 @@ class Wallet(models.Model):
 
     amount = models.FloatField(default=0.0)
 
+    def get_amount_string(self):
+        currency_symbol = get_currency_symbol(self.currency_code)
+        if currency_symbol is None:
+            return str(self.amount)
+        else:
+            return str(currency_symbol) + " " + str(self.amount)
+
+    def get_currency_symbol(self):
+        currency_symbol = get_currency_symbol(self.currency_code)
+        if currency_symbol is None:
+            return "$"
+        else:
+            return currency_symbol
+
     class Meta:
         verbose_name = "Wallet"
         verbose_name_plural = "Wallets"
@@ -71,3 +87,25 @@ class Transaction(models.Model):
     class Meta:
         verbose_name = "Transaction"
         verbose_name_plural = "Transactions"
+
+    def get_datetime(self):
+        try:
+            import pytz
+            est = pytz.timezone(settings.TIME_ZONE)
+            return self.date.astimezone(est).strftime("%b %d %Y %I:%M %p")
+        except Exception:
+            return self.date.strftime("%b %d %Y %I:%M %p")
+
+    def get_recieved_amount_string(self):
+        currency_symbol = get_currency_symbol(self.recieved_curr_code)
+        if currency_symbol is None:
+            return str(self.recieved_amount)
+        else:
+            return str(currency_symbol) + " " + str(self.recieved_amount)
+
+    def get_sent_amount_string(self):
+        currency_symbol = get_currency_symbol(self.sent_curr_code)
+        if currency_symbol is None:
+            return str(self.sent_amount)
+        else:
+            return str(currency_symbol) + " " + str(self.sent_amount)

@@ -16,12 +16,21 @@
 <div style="padding: 0 100px">
 	<table>
 	    <tr>
-	        <td style="width: 70%">
-	            <img src="blah"/>
-	        </td>
-	        <td style="width: 70%">
-	        	<a href="javascript:void(0)" class="btn white black-text">Upload Profile Pic</a>
-	        </td>
+	    	{% if request.user.profile_image %}
+	        	<td style="width: 70%">
+	            	<img id="profile-pic" src="{{request.user.profile_image.url}}" style="width: 200px; height: 200px" />
+	        	</td>
+	        	<td style="width: 30%">
+	        		<a href="#modal-upload-profile-image" class="btn white black-text modal-trigger">Change Profile Pic</a>
+	        	</td>
+	        {% else %}
+	        	<td style="width: 70%">
+	            	<img id="profile-pic" src="" style="width: 200px; height: 200px"/>
+	        	</td>
+	        	<td style="width: 30%">
+	        		<a href="#modal-upload-profile-image" class="btn white black-text modal-trigger">Upload Profile Pic</a>
+	        	</td>
+	        {% endif %}
 	    </tr>
 	</table>
 	<table>
@@ -31,23 +40,41 @@
 	    </tr>
 	    <tr>
 	        <td>First Name</td>
-	        <td><input type="text" name=""></td>
+	        <td><input type="text" name="" id="profile-first-name" ></td>
 	    </tr>
 	    <tr>
 	        <td>Last Name</td>
-	        <td><input type="text" name=""></td>
+	        <td><input type="text" name="" id="profile-last-name" ></td>
 	    </tr>
 	    <tr>
 	        <td>Email ID</td>
-	        <td><input type="text" name=""></td>
+	        <td><input type="text" name="" id="profile-emailid" ></td>
 	    </tr>
 	</table>
 </div>
 <br>
 <div class="row">
   <div class="col s4 l4 m4 offset-m4 offset-l4 offset-s4">
-    <a href="javascript:void(0)" class="btn col s12" style="border-radius:1em;">Save	</a>                      
+    <a href="javascript:void(0)" class="btn col s12" style="border-radius:1em;" onclick="save_profile_data()">Save</a>                      
   </div>
+</div>
+
+<div id="modal-upload-profile-image" class="modal">
+    <div class="modal-content">
+        <h5>Upload Profile Image</h5>
+        <div class="file-field input-field col s10">
+            <div class="btn-small black-text purple lighten-4">
+                <span>Upload Profile image</span>
+                <input id="input-upload-profile-image" type="file" accept="image/*">
+            </div>
+            <div class="file-path-wrapper">
+                <input id="input-upload-profile-image" class="file-path validate" type="text">
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a class="modal-close waves-effect waves-green btn-flat grey" id="upload-profile-image">Upload</a>
+    </div>
 </div>
 
 {% endblock %}
