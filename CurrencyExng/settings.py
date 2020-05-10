@@ -134,6 +134,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'files/')
 MEDIA_URL = '/files/'
 
 IMAGE_UPLOAD_PATH = "images"
+
 if not os.path.exists('log'):
     os.makedirs('log')
 

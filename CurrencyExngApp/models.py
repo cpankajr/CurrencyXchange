@@ -13,6 +13,9 @@ import json
 import logging
 
 class User(AbstractUser):
+    
+    profile_image = models.ImageField(
+        upload_to=settings.IMAGE_UPLOAD_PATH, null=True, blank=True, help_text="Profile Image")
 
     def name(self):
         return self.first_name + ' ' + self.last_name
