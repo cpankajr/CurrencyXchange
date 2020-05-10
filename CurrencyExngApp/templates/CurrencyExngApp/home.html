@@ -12,9 +12,9 @@
 	                            <h2>Wallet-Balance</h2>
 	                        </div>
 	                        <div class="col s9 m9 l9">
-	                        	<a href="#modal-wallet-analytics-settings" class="btn right modal-trigger white black-text" style="margin-left: 10px">Send Money</a>
-	                        	<a href="#modal-wallet-analytics-settings" class="btn right modal-trigger white black-text" style="margin-left: 10px">Add Money</a>
-	                        	<a href="#modal-wallet-analytics-settings" class="btn right modal-trigger white black-text"><i class="material-icons">add</i></a>
+	                        	<a href="#modal-send-money-wallet" class="btn right modal-trigger white black-text" style="margin-left: 10px">Send Money</a>
+	                        	<a href="#modal-add-money-wallet" class="btn right modal-trigger white black-text" style="margin-left: 10px">Add Money</a>
+	                        	<a href="#modal-create-wallet" class="btn right modal-trigger white black-text"><i class="material-icons">add</i></a>
 	                        </div>                    		
                     	</div>
                     </div>
@@ -139,7 +139,7 @@
 	                            <h2>Wallet Analytics</h2>
 	                        </div>
 	                        <div class="col s9 m9 l9">
-                        		<a href="#modal-message-analytics-settings" class="btn right modal-trigger white black-text"><i class="material-icons">filter_list</i></a>
+                        		<a href="#modal-wallet-analytics-settings" class="btn right modal-trigger white black-text"><i class="material-icons">filter_list</i></a>
 	                        </div>                    		
                     	</div>
                     </div>
@@ -152,5 +152,88 @@
             </div>
         </div>
 	</div>
+</div>
+
+<div id="modal-add-money-wallet" class="modal" style="width: 30%">
+    <div class="modal-content">
+    	<div class="row">
+    		<h6>Add Money to Wallet</h6>
+    		<hr>
+    		<div class="col s12">
+    			<p>Amount</p>
+    			<input type="number" name="">
+    		</div>
+    		<br>
+    	</div>
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class="modal-close waves-effect waves-green btn-flat bg-indigo" onclick="add_money_to_wallet()">Add Money</a>
+      <a href="javascript:void(0)" class="modal-close waves-effect waves-green btn-flat bg-indigo">Cancel</a>
+    </div>
+</div>
+
+<div id="modal-send-money-wallet" class="modal" style="width: 30%">
+    <div class="modal-content">
+    	<div class="row">
+    		<h6>Send Money to Wallet</h6>
+    		<hr>
+    		<div class="col s12">
+    			<p>User</p>
+    			<input type="number" name="">
+    			<p>Amount</p>
+    			<input type="number" name="">
+    		</div>
+    		<br>
+    	</div>
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class="modal-close waves-effect waves-green btn-flat bg-indigo" onclick="send_money_to_wallet()">Send Money</a>
+      <a href="javascript:void(0)" class="modal-close waves-effect waves-green btn-flat bg-indigo">Cancel</a>
+    </div>
+</div>
+
+<div id="modal-create-wallet" class="modal" style="width: 30%">
+    <div class="modal-content">
+    	<div class="row">
+    		<h6>Create Wallet</h6>
+    		<hr>
+    		<div class="col s12">
+    			<p>Wallet Name</p>
+    			<input type="number" name="">
+    			<select id="create-wallet-currency-type">
+					<option value="1" selected="">USD</option>
+					<option value="2">INR</option>
+					<option value="3">ABC</option>
+    			</select>
+    		</div>
+    		<br>
+    	</div>
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class="modal-close waves-effect waves-green btn-flat bg-indigo" onclick="create_new_wallet()">Create New Wallet</a>
+      <a href="javascript:void(0)" class="modal-close waves-effect waves-green btn-flat bg-indigo">Cancel</a>
+    </div>
+</div>
+
+<div id="modal-wallet-analytics-settings" class="modal" style="width: 30%">
+    <div class="modal-content">
+    	<div class="row">
+    		<h6>Filter - Message Analytics</h6>
+    		<hr>
+    		<div class="col s6">
+    			<p>Frequency</p>
+    			<select id="message-analytics-select-type">
+					<option value="1" selected="">Daily</option>
+					<option value="2">Weekly</option>
+					<option value="3">Monthly</option>
+    			</select>
+    		</div>
+    		<br>
+    	</div>
+    </div>
+    <div class="modal-footer">
+      <a href="javascript:void(0)" class="modal-close waves-effect waves-green btn-flat bg-indigo" onclick="load_wallet_analytics()">Filter</a>
+      <a href="javascript:void(0)" class="modal-close waves-effect waves-green btn-flat bg-indigo">Cancel</a>
+    </div>
 </div>
 {% endblock %}

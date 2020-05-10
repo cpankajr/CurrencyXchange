@@ -1,4 +1,5 @@
 $('select').formSelect();
+$('.modal').modal();
 
 function getCSRFToken() {
     return $('input[name="csrfmiddlewaretoken"]').val();
