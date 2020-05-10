@@ -12,9 +12,9 @@ def removeHtmlFromString(raw_str):
     cleaned_raw_str = re.sub(regex_cleaner, '', raw_str)
     return cleaned_raw_str
 
-def currency_convert(from_currency,to_currency,ammount):
+def currency_convert(from_currency_code,to_currency_code,amount):
 	currency_rate_obj = CurrencyRates()
-	return currency_rate_obj.convert(from_currency.upper(), to_currency.upper(), float(ammount))
+	return currency_rate_obj.convert(from_currency_code.upper(), to_currency_code.upper(), float(amount))
 
 def get_currency_symbol(currency_code):
 	currency_rate_obj = CurrencyRates()

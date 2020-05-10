@@ -40,7 +40,7 @@ class Wallet(models.Model):
 
     currency_code = models.CharField(max_length=500)
 
-    ammount = models.FloatField(default=0.0)
+    amount = models.FloatField(default=0.0)
 
     class Meta:
         verbose_name = "Wallet"
@@ -54,14 +54,14 @@ class Transaction(models.Model):
 
     sent_curr_code = models.CharField(max_length=500)
 
-    sent_ammount = models.FloatField(default=0.0)
+    sent_amount = models.FloatField(default=0.0)
 
     recieved_user = models.ForeignKey(User, null=True, blank=True,
                             on_delete=models.CASCADE, related_name="receiving_user")
 
     recieved_curr_code = models.CharField(max_length=500)
 
-    recieved_ammount = models.FloatField(default=0.0)
+    recieved_amount = models.FloatField(default=0.0)
 
     date = models.DateTimeField(default=timezone.now)
 

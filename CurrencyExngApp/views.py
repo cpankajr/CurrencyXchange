@@ -89,7 +89,7 @@ class LoginSubmitAPI(APIView):
                     response['status'] = 200
                 except Exception as e:
                     response['status'] = 302
-        except Exception as e:  # noqa: F841
+        except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("LoginSubmitAPI: %s at %s", e, str(exc_tb.tb_lineno))
 
@@ -117,7 +117,7 @@ class SignUpAPI(APIView):
             else:    
                 User.objects.create(username= username, password=password)
                 response['status'] = 200
-        except Exception as e:  # noqa: F841
+        except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("SignUpAPI: %s at %s", e, str(exc_tb.tb_lineno))
 
@@ -138,12 +138,16 @@ class CreateWalletAPI(APIView):
 
             username = data['username']
             username = removeHtmlFromString(username)
-            if len(User.objects.filter(username= username))>0:
+
+            currency_code = data['currency_code']
+            currency_code = removeHtmlFromString(currency_code)
+
+            if len(Wallet.objects.filter(username= username))>0:
                 response['status'] = 301
-            else:    
-                User.objects.create(username= username, password=password)
+            else:
+                Wallet.objects.create(username= username, currency_code=currency_code)
                 response['status'] = 200
-        except Exception as e:  # noqa: F841
+        except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("CreateWalletAPI: %s at %s", e, str(exc_tb.tb_lineno))
 
@@ -162,16 +166,18 @@ class ConvertCurrencyAPI(APIView):
 
             data = request.data
 
-            username = data['username']
-            username = removeHtmlFromString(username)
-            password = data['password']
-            password = removeHtmlFromString(password)
-            if len(User.objects.filter(username= username))>0:
-                response['status'] = 301
-            else:    
-                User.objects.create(username= username, password=password)
-                response['status'] = 200
-        except Exception as e:  # noqa: F841
+            from_currency_code = data['from_currency_code']
+            from_currency_code = removeHtmlFromString(from_currency_code)
+
+            to_currency_code = data['to_currency_code']
+            to_currency_code = removeHtmlFromString(to_currency_code)
+
+            amount = data['amount']
+            amount = removeHtmlFromString(amount)
+
+            response['converted_amount'] =currency_convert(from_currency_code,to_currency_code,amount)    
+            response['status'] = 200
+        except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("ConvertCurrencyAPI: %s at %s", e, str(exc_tb.tb_lineno))
 
@@ -190,16 +196,20 @@ class SendMoneyAPI(APIView):
 
             data = request.data
 
-            username = data['username']
-            username = removeHtmlFromString(username)
-            password = data['password']
+            from_username = data['from_username']
+            from_username = removeHtmlFromString(from_username)
+
+            to_username = data['to_username']
+            to_username = removeHtmlFromString(to_username)
+
+            amount = data['amount']
             password = removeHtmlFromString(password)
             if len(User.objects.filter(username= username))>0:
                 response['status'] = 301
             else:    
                 User.objects.create(username= username, password=password)
                 response['status'] = 200
-        except Exception as e:  # noqa: F841
+        except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("SendMoneyAPI: %s at %s", e, str(exc_tb.tb_lineno))
 
@@ -227,7 +237,7 @@ class AddMoneyAPI(APIView):
             else:    
                 User.objects.create(username= username, password=password)
                 response['status'] = 200
-        except Exception as e:  # noqa: F841
+        except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("AddMoneyAPI: %s at %s", e, str(exc_tb.tb_lineno))
 
