@@ -12,8 +12,9 @@ import sys
 import json
 import logging
 
+
 class User(AbstractUser):
-    
+
     profile_image = models.ImageField(
         upload_to=settings.IMAGE_UPLOAD_PATH, null=True, blank=True, help_text="Profile Image")
 
@@ -30,3 +31,40 @@ class User(AbstractUser):
     class Meta:
         verbose_name = "User"
         verbose_name_plural = "Users"
+
+
+class Wallet(models.Model):
+
+    user = models.ForeignKey(User, null=True, blank=True,
+                             on_delete=models.CASCADE)
+
+    currency = models.CharField(max_length=500)
+
+    ammount = models.FloatField(default=0.0)
+
+    class Meta:
+        verbose_name = "Wallet"
+        verbose_name_plural = "Wallets"
+
+
+class Transaction(models.Model):
+
+    sent_user = models.ForeignKey(User, null=True, blank=True,
+                            on_delete=models.CASCADE, related_name="sending_user")
+
+    sent_curr = models.CharField(max_length=500)
+
+    sent_ammount = models.FloatField(default=0.0)
+
+    recieved_user = models.ForeignKey(User, null=True, blank=True,
+                            on_delete=models.CASCADE, related_name="receiving_user")
+
+    recieved_curr = models.CharField(max_length=500)
+
+    recieved_ammount = models.FloatField(default=0.0)
+
+    date = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        verbose_name = "Transaction"
+        verbose_name_plural = "Transactions"
