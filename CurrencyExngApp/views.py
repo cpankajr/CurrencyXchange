@@ -123,7 +123,119 @@ class SignUpAPI(APIView):
 
         return Response(data=response)
 
+class CreateWalletAPI(APIView):
+
+    authentication_classes = (
+        CsrfExemptSessionAuthentication, BasicAuthentication)
+
+    def post(self, request, *args, **kwargs):
+
+        response = {}
+        response['status'] = 500
+        try:
+
+            data = request.data
+
+            username = data['username']
+            username = removeHtmlFromString(username)
+            if len(User.objects.filter(username= username))>0:
+                response['status'] = 301
+            else:    
+                User.objects.create(username= username, password=password)
+                response['status'] = 200
+        except Exception as e:  # noqa: F841
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            logger.error("CreateWalletAPI: %s at %s", e, str(exc_tb.tb_lineno))
+
+        return Response(data=response)
+
+class ConvertCurrencyAPI(APIView):
+
+    authentication_classes = (
+        CsrfExemptSessionAuthentication, BasicAuthentication)
+
+    def post(self, request, *args, **kwargs):
+
+        response = {}
+        response['status'] = 500
+        try:
+
+            data = request.data
+
+            username = data['username']
+            username = removeHtmlFromString(username)
+            password = data['password']
+            password = removeHtmlFromString(password)
+            if len(User.objects.filter(username= username))>0:
+                response['status'] = 301
+            else:    
+                User.objects.create(username= username, password=password)
+                response['status'] = 200
+        except Exception as e:  # noqa: F841
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            logger.error("ConvertCurrencyAPI: %s at %s", e, str(exc_tb.tb_lineno))
+
+        return Response(data=response)
+
+class SendMoneyAPI(APIView):
+
+    authentication_classes = (
+        CsrfExemptSessionAuthentication, BasicAuthentication)
+
+    def post(self, request, *args, **kwargs):
+
+        response = {}
+        response['status'] = 500
+        try:
+
+            data = request.data
+
+            username = data['username']
+            username = removeHtmlFromString(username)
+            password = data['password']
+            password = removeHtmlFromString(password)
+            if len(User.objects.filter(username= username))>0:
+                response['status'] = 301
+            else:    
+                User.objects.create(username= username, password=password)
+                response['status'] = 200
+        except Exception as e:  # noqa: F841
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            logger.error("SendMoneyAPI: %s at %s", e, str(exc_tb.tb_lineno))
+
+        return Response(data=response)
+
+class AddMoneyAPI(APIView):
+
+    authentication_classes = (
+        CsrfExemptSessionAuthentication, BasicAuthentication)
+
+    def post(self, request, *args, **kwargs):
+
+        response = {}
+        response['status'] = 500
+        try:
+
+            data = request.data
+
+            username = data['username']
+            username = removeHtmlFromString(username)
+            password = data['password']
+            password = removeHtmlFromString(password)
+            if len(User.objects.filter(username= username))>0:
+                response['status'] = 301
+            else:    
+                User.objects.create(username= username, password=password)
+                response['status'] = 200
+        except Exception as e:  # noqa: F841
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            logger.error("AddMoneyAPI: %s at %s", e, str(exc_tb.tb_lineno))
+
+        return Response(data=response)
+
 LoginSubmit = LoginSubmitAPI.as_view()
 SignUp = SignUpAPI.as_view()
-
-
+AddMoney = AddMoneyAPI.as_view()
+SendMoney = SendMoneyAPI.as_view()
+CreateWallet = CreateWalletAPI.as_view()
+ConvertCurrency = ConvertCurrencyAPI.as_view()
