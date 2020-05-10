@@ -65,14 +65,14 @@
                       	<div class="col s12">
                       		From                      		
 		                  	<select id="convert-from-currency-code">
-		                  		{% for currency in SUPPORTED_CURRENCIES %}
-      								<option value="{{currency}}" selected="">{{currency}}</option>
+		                  		{% for currency_code,currency_info in SUPPORTED_CURRENCIES.items %}
+      								<option value="{{currency_code}}" selected="">{{currency_info}}</option>
       							{% endfor %}
 		                  	</select>
 		                  	To
 		                  	<select id="convert-to-currency-code">
-      		    				{% for currency in SUPPORTED_CURRENCIES %}
-      								<option value="{{currency}}" selected="">{{currency}}</option>
+      		    				{% for currency_code,currency_info in SUPPORTED_CURRENCIES.items %}
+      								<option value="{{currency_code}}" selected="">{{currency_info}}</option>
       							{% endfor %}
 		                  	</select>
                       	</div>
@@ -234,8 +234,8 @@
     		<div class="col s12">
     			<p>Select Currency Code for Wallet</p>
     			<select id="create-wallet-currency-type">
-    				{% for currency in SUPPORTED_CURRENCIES %}
-						<option value="{{currency}}" selected="">{{currency}}</option>
+              		{% for currency_code,currency_info in SUPPORTED_CURRENCIES.items %}
+						<option value="{{currency_code}}" selected="">{{currency_info}}</option>
 					{% endfor %}
     			</select>
     		</div>

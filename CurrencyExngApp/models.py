@@ -84,6 +84,9 @@ class Transaction(models.Model):
 
     date = models.DateTimeField(default=timezone.now)
 
+    reciept_pdf = models.FileField(
+        upload_to="files", null=True, blank=True, help_text="Reciept PDF")
+
     class Meta:
         verbose_name = "Transaction"
         verbose_name_plural = "Transactions"

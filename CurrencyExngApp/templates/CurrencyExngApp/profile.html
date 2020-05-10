@@ -40,15 +40,15 @@
 	    </tr>
 	    <tr>
 	        <td>First Name</td>
-	        <td><input type="text" name="" id="profile-first-name" ></td>
+	        <td><input type="text" name="" id="profile-first-name" value="{{request.user.first_name}}"></td>
 	    </tr>
 	    <tr>
 	        <td>Last Name</td>
-	        <td><input type="text" name="" id="profile-last-name" ></td>
+	        <td><input type="text" name="" id="profile-last-name" value="{{request.user.last_name}}"></td>
 	    </tr>
 	    <tr>
 	        <td>Email ID</td>
-	        <td><input type="text" name="" id="profile-emailid" ></td>
+	        <td><input type="text" name="" id="profile-emailid" value="{{request.user.email}}"></td>
 	    </tr>
 	</table>
 </div>

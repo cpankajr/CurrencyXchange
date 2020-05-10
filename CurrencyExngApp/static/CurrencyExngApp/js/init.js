@@ -269,7 +269,7 @@ function send_money_to_wallet() {
                 }, 2000);
 
                 M.toast({
-                    "html": "Ammount is successfully sent to "+to_username+" !!!"
+                    "html": "Amount is successfully sent to "+to_username+" !!!"
                 }, 2000);
             } else if (response["status"] == 301) {
                 M.toast({
@@ -348,10 +348,11 @@ function convert_currency() {
 
 $(document).on("click", "#upload-profile-image", function(e) {
     e.preventDefault();
-    var output = document.getElementById('profile-pic');
-    output.src = URL.createObjectURL($("#input-upload-profile-image")[0].files[0]);
-    output.onload = function() {
-      URL.revokeObjectURL(output.src) // free memory
+    var pic_elmt = document.getElementById('profile-pic');
+    pic_elmt.src = URL.createObjectURL($("#input-upload-profile-image")[0].files[0]);
+    pic_elmt.setAttribute("new_image","true")
+    pic_elmt.onload = function() {
+      URL.revokeObjectURL(pic_elmt.src) // free memory
     }
 });
 
@@ -360,7 +361,14 @@ function save_profile_data() {
 	first_name = document.getElementById("profile-first-name").value;
 	last_name = document.getElementById("profile-last-name").value;
 	emailid = document.getElementById("profile-emailid").value;
-    var image_data = ($("#input-upload-profile-image"))[0].files[0]
+	var pic_elmt = document.getElementById('profile-pic');
+    new_image_flag = pic_elmt.getAttribute("new_image")
+    if (new_image_flag=="true"){
+    	var image_data = ($("#input-upload-profile-image"))[0].files[0]
+    }
+   	else{
+   		var image_data = ""	
+   	}
     var formData = new FormData();
     var CSRF_TOKEN = $('input[name="csrfmiddlewaretoken"]').val();
     formData.append("username", username);
@@ -380,7 +388,13 @@ function save_profile_data() {
         contentType: false,
         success: function(response) {
             if (response["status"] == 200) {
-                
+             	setTimeout(function() {
+             	    window.location.reload();
+             	}, 2000);
+
+             	M.toast({
+             	    "html": "Profile Updated!!!"
+             	}, 2000);   
             }
             else {
                 M.toast({

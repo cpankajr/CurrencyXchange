@@ -23,9 +23,36 @@ from CurrencyExngApp.utils import *
 
 logger = logging.getLogger(__name__)
 
-SUPPORTED_CURRENCIES =['EUR (€)', 'IDR (Rp)', 'BGN (BGN)', 'ILS (₪)', 'GBP (£)', 'DKK (Kr)', 'CAD ($)', 'JPY (¥)', 'HUF (Ft)', 'RON (L)', 'MYR (RM)', 'SEK (kr)', 'SGD (S$)', 'HKD (HK$)', 'AUD ($)', 'CHF (Fr.)', 'TRY (TRY)', 'HRK (kn)', 'NZD (NZ$)', 'THB (฿)', 'USD (US$)', 'NOK (kr)', 'RUB (R)', 'INR (₹)', 'MXN ($)', 'CZK (Kč)', 'BRL (R$)', 'PLN (zł)', 'PHP (₱)', 'ZAR (R)']
-
-
+SUPPORTED_CURRENCIES = {'EUR': 'EUR (€) (European Euro)',
+                        'IDR': 'IDR (Rp) (Indonesian rupiah)', 
+                        'BGN': 'BGN (BGN) (Bulgarian lev)', 
+                        'ILS': 'ILS (₪) (Israeli new sheqel)', 
+                        'GBP': 'GBP (£) (British pound)', 
+                        'DKK': 'DKK (Kr) (Danish krone)', 
+                        'CAD': 'CAD ($) (Canadian dollar)', 
+                        'JPY': 'JPY (¥) (Japanese yen)', 
+                        'HUF': 'HUF (Ft) (Hungarian forint)', 
+                        'RON': 'RON (L) (Romanian leu)', 
+                        'MYR': 'MYR (RM) (Malaysian ringgit)', 
+                        'SEK': 'SEK (kr) (Swedish krona)', 
+                        'SGD': 'SGD (S$) (Singapore dollar)', 
+                        'HKD': 'HKD (HK$) (Hong Kong dollar)', 
+                        'AUD': 'AUD ($) (Australian dollar)',
+                        'CHF': 'CHF (Fr.) (Swiss franc)', 
+                        'TRY': 'TRY (TRY) (Turkish new lira)', 
+                        'HRK': 'HRK (kn) (Croatian kuna)', 
+                        'NZD': 'NZD (NZ$) (New Zealand dollar)', 
+                        'THB': 'THB (฿) (Thai baht)', 
+                        'USD': 'USD (US$) (United States dollar)', 
+                        'NOK': 'NOK (kr) (Norwegian krone)', 
+                        'RUB': 'RUB (R) (Russian ruble)', 
+                        'INR': 'INR (₹) (Indian rupee)', 
+                        'MXN': 'MXN ($) (Mexican peso)', 
+                        'CZK': 'CZK (Kč) (Czech koruna)', 
+                        'BRL': 'BRL (R$) (Brazilian real)', 
+                        'PLN': 'PLN (zł) (Polish zloty)', 
+                        'PHP': 'PHP (₱) (Philippine peso)', 
+                        'ZAR': 'ZAR (R) (South African rand)'}
 
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
@@ -33,22 +60,25 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
     def enforce_csrf(self, request):
         return
 
+
 def HomePage(request):
     if request.user.is_authenticated():
         wallet_objs = Wallet.objects.filter(user=request.user)
-        if len(wallet_objs)>0:
+        if len(wallet_objs) > 0:
             wallet_obj = wallet_objs[0]
         else:
             wallet_obj = None
-        transaction_objs = Transaction.objects.filter(Q(sent_user=request.user)| Q(recieved_user=request.user))
+        transaction_objs = Transaction.objects.filter(
+            Q(sent_user=request.user) | Q(recieved_user=request.user))
         print(transaction_objs)
-        return render(request, 'CurrencyExngApp/home.html',{
-            "wallet_obj":wallet_obj,
-            "transaction_objs":transaction_objs.order_by("-pk"),
-            "SUPPORTED_CURRENCIES":SUPPORTED_CURRENCIES
-            })
+        return render(request, 'CurrencyExngApp/home.html', {
+            "wallet_obj": wallet_obj,
+            "transaction_objs": transaction_objs.order_by("-pk"),
+            "SUPPORTED_CURRENCIES": SUPPORTED_CURRENCIES
+        })
     else:
         return HttpResponseRedirect("/login")
+
 
 def LoginPage(request):
     if request.user.is_authenticated():
@@ -56,11 +86,13 @@ def LoginPage(request):
     else:
         return render(request, 'CurrencyExngApp/login.html')
 
+
 def SignupPage(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect("/home")
     else:
         return render(request, 'CurrencyExngApp/signup.html')
+
 
 def Profile(request):
     if request.user.is_authenticated():
@@ -68,10 +100,12 @@ def Profile(request):
     else:
         return HttpResponseRedirect("/login")
 
+
 def Logout(request):  # noqa: N802
     if request.user.is_authenticated():
         logout(request)
     return HttpResponseRedirect("/login")
+
 
 class LoginSubmitAPI(APIView):
 
@@ -91,7 +125,7 @@ class LoginSubmitAPI(APIView):
             password = data['password']
             password = removeHtmlFromString(password)
 
-            if len(User.objects.filter(username= username))==0:
+            if len(User.objects.filter(username=username)) == 0:
                 response['status'] = 301
             else:
                 try:
@@ -105,6 +139,7 @@ class LoginSubmitAPI(APIView):
             logger.error("LoginSubmitAPI: %s at %s", e, str(exc_tb.tb_lineno))
 
         return Response(data=response)
+
 
 class SignUpAPI(APIView):
 
@@ -123,16 +158,17 @@ class SignUpAPI(APIView):
             username = removeHtmlFromString(username)
             password = data['password']
             password = removeHtmlFromString(password)
-            if len(User.objects.filter(username= username))>0:
+            if len(User.objects.filter(username=username)) > 0:
                 response['status'] = 301
-            else:    
-                User.objects.create(username= username, password=password)
+            else:
+                User.objects.create(username=username, password=password)
                 response['status'] = 200
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("SignUpAPI: %s at %s", e, str(exc_tb.tb_lineno))
 
         return Response(data=response)
+
 
 class CreateWalletAPI(APIView):
 
@@ -153,16 +189,17 @@ class CreateWalletAPI(APIView):
             currency_code = data['currency_code']
             currency_code = removeHtmlFromString(currency_code)
             user = User.objects.get(username=username)
-            if len(Wallet.objects.filter(user= user))>0:
+            if len(Wallet.objects.filter(user=user)) > 0:
                 response['status'] = 301
             else:
-                Wallet.objects.create(user= user, currency_code=currency_code)
+                Wallet.objects.create(user=user, currency_code=currency_code)
                 response['status'] = 200
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("CreateWalletAPI: %s at %s", e, str(exc_tb.tb_lineno))
 
         return Response(data=response)
+
 
 class ConvertCurrencyAPI(APIView):
 
@@ -185,15 +222,18 @@ class ConvertCurrencyAPI(APIView):
 
             amount = data['amount']
             amount = removeHtmlFromString(amount)
-            converted_amount = currency_convert(from_currency_code,to_currency_code,amount)
+            converted_amount = currency_convert(
+                from_currency_code, to_currency_code, amount)
             if converted_amount is not None:
-                response['converted_amount'] =  converted_amount  
+                response['converted_amount'] = converted_amount
             response['status'] = 200
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
-            logger.error("ConvertCurrencyAPI: %s at %s", e, str(exc_tb.tb_lineno))
+            logger.error("ConvertCurrencyAPI: %s at %s",
+                         e, str(exc_tb.tb_lineno))
 
         return Response(data=response)
+
 
 class SendMoneyAPI(APIView):
 
@@ -216,43 +256,48 @@ class SendMoneyAPI(APIView):
 
             amount = data['amount']
             amount = removeHtmlFromString(amount)
-            if len(User.objects.filter(username= to_username))>0:
+            if len(User.objects.filter(username=to_username)) > 0:
 
                 sending_user = User.objects.get(username=from_username)
                 recieving_user = User.objects.get(username=to_username)
-                
+
                 sending_wallet_obj = Wallet.objects.get(user=sending_user)
-                if float(amount)>sending_wallet_obj.amount:
+                if float(amount) > sending_wallet_obj.amount:
                     response['status'] = 302
                 else:
                     try:
-                        recieving_wallet_obj = Wallet.objects.get(user=recieving_user)
+                        recieving_wallet_obj = Wallet.objects.get(
+                            user=recieving_user)
                     except Exception as e:
                         recieving_wallet_obj = None
                     if recieving_wallet_obj is not None:
                         from_currency_code = sending_wallet_obj.currency_code
                         to_currency_code = recieving_wallet_obj.currency_code
 
-                        converted_amount = currency_convert(from_currency_code,to_currency_code,amount)
+                        converted_amount = currency_convert(
+                            from_currency_code, to_currency_code, amount)
 
-                        sending_wallet_obj.amount = sending_wallet_obj.amount - float(amount)
-                        recieving_wallet_obj.amount = recieving_wallet_obj.amount + float(converted_amount)
+                        sending_wallet_obj.amount = sending_wallet_obj.amount - \
+                            float(amount)
+                        recieving_wallet_obj.amount = recieving_wallet_obj.amount + \
+                            float(converted_amount)
 
                         sending_wallet_obj.save()
                         recieving_wallet_obj.save()
-                        Transaction.objects.create(sent_user=sending_user ,sent_curr_code=from_currency_code,sent_amount=amount,
-                            recieved_user=recieving_user,recieved_curr_code=to_currency_code,recieved_amount=converted_amount)
+                        Transaction.objects.create(sent_user=sending_user, sent_curr_code=from_currency_code, sent_amount=amount,
+                                                   recieved_user=recieving_user, recieved_curr_code=to_currency_code, recieved_amount=converted_amount)
                         response['status'] = 200
                     else:
-                        response['status'] = 303        
-                            
-            else:    
+                        response['status'] = 303
+
+            else:
                 response['status'] = 301
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("SendMoneyAPI: %s at %s", e, str(exc_tb.tb_lineno))
 
         return Response(data=response)
+
 
 class AddMoneyAPI(APIView):
 
@@ -272,13 +317,14 @@ class AddMoneyAPI(APIView):
 
             amount = data['amount']
             amount = removeHtmlFromString(amount)
-            
+
             user = User.objects.get(username=username)
 
             wallet_obj = Wallet.objects.get(user=user)
             wallet_obj.amount = wallet_obj.amount + float(amount)
             wallet_obj.save()
-            Transaction.objects.create(sent_user=user ,sent_curr_code=wallet_obj.currency_code,sent_amount=amount)
+            Transaction.objects.create(
+                sent_user=user, sent_curr_code=wallet_obj.currency_code, sent_amount=amount)
             response['status'] = 200
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -315,7 +361,7 @@ class SaveProfileAPI(APIView):
             image_data = data['image_data']
 
             user_obj = User.objects.get(username=username)
-            if image_data!="":
+            if image_data != "":
                 file_path = save_image(image_data)
 
                 if file_path is None:
