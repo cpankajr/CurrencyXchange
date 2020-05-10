@@ -203,7 +203,7 @@ class SendMoneyAPI(APIView):
             to_username = removeHtmlFromString(to_username)
 
             amount = data['amount']
-            password = removeHtmlFromString(password)
+            amount = removeHtmlFromString(amount)
             if len(User.objects.filter(username= to_username))>0:
 
                 sending_user = User.objects.get(username=from_username)
@@ -266,9 +266,48 @@ class AddMoneyAPI(APIView):
 
         return Response(data=response)
 
+
+class SaveProfileAPI(APIView):
+
+    authentication_classes = (
+        CsrfExemptSessionAuthentication, BasicAuthentication)
+
+    def post(self, request, *args, **kwargs):
+
+        response = {}
+        response['status'] = 500
+        try:
+
+            data = request.data
+
+            username = data['username']
+            username = removeHtmlFromString(username)
+
+            first_name = data['first_name']
+            first_name = removeHtmlFromString(first_name)
+
+            last_name = data['last_name']
+            last_name = removeHtmlFromString(last_name)
+
+            image_data = data['image_data']
+            image_data = removeHtmlFromString(image_data)
+
+            file_path = save_image(image_data)
+            if file_path is None:
+                response['status'] = 301
+            else:
+                response['file_path'] = file_path
+                response['status'] = 200
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            logger.error("SaveProfileAPI: %s at %s", e, str(exc_tb.tb_lineno))
+
+        return Response(data=response)
+
 LoginSubmit = LoginSubmitAPI.as_view()
 SignUp = SignUpAPI.as_view()
 AddMoney = AddMoneyAPI.as_view()
 SendMoney = SendMoneyAPI.as_view()
 CreateWallet = CreateWalletAPI.as_view()
 ConvertCurrency = ConvertCurrencyAPI.as_view()
+SaveProfile = SaveProfileAPI.as_view()

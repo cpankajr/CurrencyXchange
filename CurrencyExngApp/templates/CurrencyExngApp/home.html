@@ -47,7 +47,7 @@
                       <div class="row">
                       	<div class="col s12">                      		
 		                  	Amount
-		                    <input type="number" name="" style="
+		                    <input type="number" id="convert-currency-amount" name="" style="
 		                        border-radius: 25px;
 		                        width: 40%;
 		                        margin-left: 20px;
@@ -57,25 +57,26 @@
                       	</div>
                       	<div class="col s12">
                       		From                      		
-		                  	<select>
-		                  		<option value="">USD</option>
-		                  		<option value="">USD</option>
-		                  		<option value="">USD</option>
-		                  		<option value="">USD</option>
+		                  	<select id="convert-from-currency-code">
+		                  		<option value="USD">USD</option>
+		                  		<option value="INR">INR</option>
+		                  		<option value="GBP">GBP</option>
 		                  	</select>
 		                  	To
-		                  	<select>
-		                  		<option value="">USD</option>
-		                  		<option value="">USD</option>
-		                  		<option value="">USD</option>
-		                  		<option value="">USD</option>
+		                  	<select id="convert-to-currency-code">
+		                  		<option value="USD">USD</option>
+		                  		<option value="INR">INR</option>
+		                  		<option value="GBP">GBP</option>
 		                  	</select>
                       	</div>
                       </div>
                       <div class="row">
                         <div class="col s6 l6 m6 offset-m3 offset-l3 offset-s3">
-                          <a href="javascript:void(0)" class="btn col s12" style="border-radius:1em;" id="convert-currency-btn" >Convert</a>                      
+                          <a href="javascript:void(0)" class="btn col s12" style="border-radius:1em;" onclick="convert_currency()">Convert</a>                      
                         </div>
+                      </div>
+
+                      <div class="row" style="display: none;" id="converted-currency-div">
                       </div>
                     </div>
                 </div>
@@ -161,7 +162,7 @@
     		<hr>
     		<div class="col s12">
     			<p>Amount</p>
-    			<input type="number" name="">
+    			<input type="number" name="" id="add-money-amount">
     		</div>
     		<br>
     	</div>
@@ -179,9 +180,9 @@
     		<hr>
     		<div class="col s12">
     			<p>User</p>
-    			<input type="number" name="">
+    			<input type="text" name="" id="send-money-to-username">
     			<p>Amount</p>
-    			<input type="number" name="">
+    			<input type="number" name="" id="send-money-amount">
     		</div>
     		<br>
     	</div>
@@ -198,12 +199,11 @@
     		<h6>Create Wallet</h6>
     		<hr>
     		<div class="col s12">
-    			<p>Wallet Name</p>
-    			<input type="number" name="">
+    			<p>Select Currency Code for Wallet</p>
     			<select id="create-wallet-currency-type">
-					<option value="1" selected="">USD</option>
-					<option value="2">INR</option>
-					<option value="3">ABC</option>
+					<option value="usd" selected="">USD</option>
+					<option value="inr">INR</option>
+					<option value="gbp">GBP</option>
     			</select>
     		</div>
     		<br>

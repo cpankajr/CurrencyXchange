@@ -16,7 +16,7 @@
 </head>
 <body class="grey lighten-4">
   {% csrf_token %}
-
+  <p id="loggin-username" style="display: none;">{{ request.user.username }}</p>
   <div class="navbar-fixed">
 
     <nav class="white lighten-1" role="navigation">
