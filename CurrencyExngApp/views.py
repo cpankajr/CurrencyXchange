@@ -141,11 +141,11 @@ class CreateWalletAPI(APIView):
 
             currency_code = data['currency_code']
             currency_code = removeHtmlFromString(currency_code)
-
-            if len(Wallet.objects.filter(username= username))>0:
+            user = User.objects.get(username=username)
+            if len(Wallet.objects.filter(user= user))>0:
                 response['status'] = 301
             else:
-                Wallet.objects.create(username= username, currency_code=currency_code)
+                Wallet.objects.create(user= user, currency_code=currency_code)
                 response['status'] = 200
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -174,8 +174,9 @@ class ConvertCurrencyAPI(APIView):
 
             amount = data['amount']
             amount = removeHtmlFromString(amount)
-
-            response['converted_amount'] =currency_convert(from_currency_code,to_currency_code,amount)    
+            converted_amount = currency_convert(from_currency_code,to_currency_code,amount)
+            if converted_amount is not None:
+                response['converted_amount'] =  converted_amount  
             response['status'] = 200
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
@@ -210,23 +211,30 @@ class SendMoneyAPI(APIView):
                 recieving_user = User.objects.get(username=to_username)
                 
                 sending_wallet_obj = Wallet.objects.get(user=sending_user)
-                recieving_wallet_obj = Wallet.objects.get(user=recieving_user)
-
                 if float(amount)>sending_wallet_obj.amount:
                     response['status'] = 302
                 else:
-                    
-                    from_currency_code = sending_wallet_obj.currency_code
-                    to_currency_code = recieving_wallet_obj.currency_code
+                    try:
+                        recieving_wallet_obj = Wallet.objects.get(user=recieving_user)
+                    except Exception as e:
+                        recieving_wallet_obj = None
+                    if recieving_wallet_obj is not None:
+                        from_currency_code = sending_wallet_obj.currency_code
+                        to_currency_code = recieving_wallet_obj.currency_code
 
-                    converted_amount = currency_convert(from_currency_code,to_currency_code,amount)
+                        converted_amount = currency_convert(from_currency_code,to_currency_code,amount)
 
-                    sending_wallet_obj.amount = sending_wallet_obj.amount - amount
-                    recieving_wallet_obj = recieving_wallet_obj + converted_amount
+                        sending_wallet_obj.amount = sending_wallet_obj.amount - float(amount)
+                        recieving_wallet_obj.amount = recieving_wallet_obj.amount + float(converted_amount)
 
-                    sending_wallet_obj.save()
-                    recieving_wallet_obj.save()
-                    response['status'] = 200
+                        sending_wallet_obj.save()
+                        recieving_wallet_obj.save()
+                        Transaction.objects.create(sent_user=sending_user ,sent_curr_code=from_currency_code,sent_amount=amount,
+                            recieved_user=recieving_user,recieved_curr_code=to_currency_code,recieved_amount=converted_amount)
+                        response['status'] = 200
+                    else:
+                        response['status'] = 303        
+                            
             else:    
                 response['status'] = 301
         except Exception as e:
@@ -257,8 +265,9 @@ class AddMoneyAPI(APIView):
             user = User.objects.get(username=username)
 
             wallet_obj = Wallet.objects.get(user=user)
-            wallet_obj.amount = wallet_obj.amount + amount
+            wallet_obj.amount = wallet_obj.amount + float(amount)
             wallet_obj.save()
+            Transaction.objects.create(sent_user=user ,sent_curr_code=wallet_obj.currency_code,sent_amount=amount)
             response['status'] = 200
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()

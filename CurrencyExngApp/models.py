@@ -46,6 +46,9 @@ class Wallet(models.Model):
         verbose_name = "Wallet"
         verbose_name_plural = "Wallets"
 
+    def __str__(self):
+        return self.user.username+"'s Wallet"
+
 
 class Transaction(models.Model):
 

@@ -150,7 +150,7 @@ $(document).on("click", "#register-btn", function(e) {
 function create_new_wallet() {
 
     currency_code = document.getElementById("create-wallet-currency-type").value;
-    username = document.getElementById("loggin-username").value;
+    username = document.getElementById("loggin-username").innerHTML;
 
     if ((currency_code == "")|| (currency_code == null) || (currency_code == undefined)) {
     	M.toast({
@@ -191,7 +191,7 @@ function create_new_wallet() {
 
 function add_money_to_wallet() {
 
-    username = document.getElementById("loggin-username").value;
+    username = document.getElementById("loggin-username").innerHTML;
     add_money_amount = document.getElementById("add-money-amount").value;
 
     if ((add_money_amount == "")||(add_money_amount<0) || (add_money_amount==0)) {
@@ -233,7 +233,7 @@ function add_money_to_wallet() {
 
 function send_money_to_wallet() {
 
-    from_username = document.getElementById("loggin-username").value;
+    from_username = document.getElementById("loggin-username").innerHTML;
     to_username = document.getElementById("send-money-to-username").value;
     amount = document.getElementById("send-money-amount").value;
 
@@ -278,6 +278,10 @@ function send_money_to_wallet() {
             } else if (response["status"] == 302) {
                 M.toast({
                     "html": "Entered amount is greater than the total money in wallet. Please add money and try again"
+                }, 2000);
+            } else if (response["status"] == 303) {
+                M.toast({
+                    "html": "Receiving User havent registered for wallet yet, please ask them to register"
                 }, 2000);
             }
             else {
