@@ -70,7 +70,7 @@ def HomePage(request):
             wallet_obj = None
         transaction_objs = Transaction.objects.filter(
             Q(sent_user=request.user) | Q(recieved_user=request.user))
-        print(transaction_objs)
+        # print(transaction_objs)
         return render(request, 'CurrencyExngApp/home.html', {
             "wallet_obj": wallet_obj,
             "transaction_objs": transaction_objs.order_by("-pk"),

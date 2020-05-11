@@ -1,2 +1,6 @@
-[10-May-2020 18:10:27] ERROR [CurrencyExngApp.views:327] SaveProfileAPI: expected string or bytes-like object at 311
-[10-May-2020 18:14:20] ERROR [CurrencyExngApp.views:327] SaveProfileAPI: 'str' object has no attribute 'name' at 313
+[10-May-2020 19:44:35] ERROR [CurrencyExngApp.views:331] AddMoneyAPI: maximum recursion depth exceeded at 327
+[10-May-2020 19:46:02] ERROR [CurrencyExngApp.views:331] AddMoneyAPI: maximum recursion depth exceeded at 327
+[10-May-2020 20:07:23] ERROR [CurrencyExngApp.views:331] AddMoneyAPI: 'NoneType' object has no attribute 'username' at 327
+[10-May-2020 20:12:11] ERROR [CurrencyExngApp.views:297] SendMoneyAPI: 'latin-1' codec can't encode character '\u20b9' in position 252: ordinal not in range(256) at 288
+[10-May-2020 20:16:13] ERROR [CurrencyExngApp.views:297] SendMoneyAPI: 'latin-1' codec can't encode character '\u20b9' in position 251: ordinal not in range(256) at 288
+[10-May-2020 20:18:19] ERROR [CurrencyExngApp.views:297] SendMoneyAPI: 'latin-1' codec can't encode character '\u20b9' in position 250: ordinal not in range(256) at 288

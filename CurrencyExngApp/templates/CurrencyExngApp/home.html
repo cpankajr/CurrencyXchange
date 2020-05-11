@@ -145,7 +145,11 @@
 			                      	</div>
 			                    {% endif %}
 		                      	<div class="col s4">
-		                      		<i class="material-icons red-text">picture_as_pdf</i>
+		                      		{% if transaction_obj.reciept_pdf %}
+		                      			<a href="{{transaction_obj.reciept_pdf.url}}">
+		                      			<i class="material-icons red-text" >picture_as_pdf</i>
+		                      			</a>
+		                      		{% endif %}
 		                      	</div>
 		                      	<br>
 		                      	<hr>
@@ -251,11 +255,11 @@
 <div id="modal-wallet-analytics-settings" class="modal" style="width: 30%">
     <div class="modal-content">
     	<div class="row">
-    		<h6>Filter - Message Analytics</h6>
+    		<h6>Filter - Wallet Analytics</h6>
     		<hr>
     		<div class="col s6">
     			<p>Frequency</p>
-    			<select id="message-analytics-select-type">
+    			<select id="wallet-analytics-select-type">
 					<option value="1" selected="">Daily</option>
 					<option value="2">Weekly</option>
 					<option value="3">Monthly</option>

@@ -11,6 +11,7 @@ from slugify import slugify
 import sys
 import json
 import logging
+import fpdf
 
 from CurrencyExngApp.utils import *
 
@@ -112,3 +113,32 @@ class Transaction(models.Model):
             return str(self.sent_amount)
         else:
             return str(currency_symbol) + " " + str(self.sent_amount)
+
+@receiver(post_save, sender=Transaction)
+def generate_reciept(sender, instance, **kwargs):
+    if kwargs["created"] and not kwargs["raw"]:
+        pdf = fpdf.FPDF(format='letter')
+        pdf.add_page()
+        pdf.set_font("Arial", size=12)
+        pdf.cell(200, 10, txt="Transaction Reciept", ln=1, align="C")
+
+        if instance.sent_user and instance.recieved_user:
+            pdf.cell(200, 10, txt="Sender: "+instance.sent_user.username, ln=1)
+            pdf.cell(200, 10, txt="Amount Transfered: "+str(instance.sent_curr_code.upper()) + " " + str(instance.sent_amount), ln=1)
+                
+            pdf.cell(200, 10, txt="Reciever: "+instance.recieved_user.username, ln=1)
+
+            pdf.cell(200, 10, txt="Amount Recieved: "+str(instance.recieved_curr_code.upper()) + " " + str(instance.recieved_amount), ln=1)
+
+        else:
+            pdf.cell(200, 10, txt="Amount Added to Wallet", ln=1)
+            pdf.cell(200, 10, txt="Amount Transfered: "+str(instance.sent_curr_code.upper()) + " " + str(instance.sent_amount), ln=1)
+
+        pdf.cell(200, 10, txt="Date: "+instance.get_datetime(), ln=1)
+        pdf.cell(200, 10, txt="", ln=1)
+        pdf.cell(200, 10, txt="", ln=1)
+        pdf.cell(200, 10, txt="Transaction Completed Successfully", ln=1, align="C")
+
+        pdf.output("files/reciept_"+instance.sent_user.username+str(instance.sent_amount)+instance.get_datetime()+".pdf")
+        instance.reciept_pdf = "reciept_"+instance.sent_user.username+str(instance.sent_amount)+instance.get_datetime()+".pdf"
+        instance.save()
