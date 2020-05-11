@@ -48,9 +48,9 @@ class Wallet(models.Model):
     def get_amount_string(self):
         currency_symbol = get_currency_symbol(self.currency_code)
         if currency_symbol is None:
-            return str(self.amount)
+            return str(round(self.amount, 3))
         else:
-            return str(currency_symbol) + " " + str(self.amount)
+            return str(currency_symbol) + " " + str(round(self.amount, 3))
 
     def get_currency_symbol(self):
         currency_symbol = get_currency_symbol(self.currency_code)
@@ -103,16 +103,16 @@ class Transaction(models.Model):
     def get_recieved_amount_string(self):
         currency_symbol = get_currency_symbol(self.recieved_curr_code)
         if currency_symbol is None:
-            return str(self.recieved_amount)
+            return str(round(self.recieved_amount, 3))
         else:
-            return str(currency_symbol) + " " + str(self.recieved_amount)
+            return str(currency_symbol) + " " + str(round(self.recieved_amount, 3))
 
     def get_sent_amount_string(self):
         currency_symbol = get_currency_symbol(self.sent_curr_code)
         if currency_symbol is None:
-            return str(self.sent_amount)
+            return str(round(self.sent_amount, 3))
         else:
-            return str(currency_symbol) + " " + str(self.sent_amount)
+            return str(currency_symbol) + " " + str(round(self.sent_amount, 3))
 
 @receiver(post_save, sender=Transaction)
 def generate_reciept(sender, instance, **kwargs):

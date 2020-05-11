@@ -1,6 +1,8 @@
-[10-May-2020 19:44:35] ERROR [CurrencyExngApp.views:331] AddMoneyAPI: maximum recursion depth exceeded at 327
-[10-May-2020 19:46:02] ERROR [CurrencyExngApp.views:331] AddMoneyAPI: maximum recursion depth exceeded at 327
-[10-May-2020 20:07:23] ERROR [CurrencyExngApp.views:331] AddMoneyAPI: 'NoneType' object has no attribute 'username' at 327
-[10-May-2020 20:12:11] ERROR [CurrencyExngApp.views:297] SendMoneyAPI: 'latin-1' codec can't encode character '\u20b9' in position 252: ordinal not in range(256) at 288
-[10-May-2020 20:16:13] ERROR [CurrencyExngApp.views:297] SendMoneyAPI: 'latin-1' codec can't encode character '\u20b9' in position 251: ordinal not in range(256) at 288
-[10-May-2020 20:18:19] ERROR [CurrencyExngApp.views:297] SendMoneyAPI: 'latin-1' codec can't encode character '\u20b9' in position 250: ordinal not in range(256) at 288
+[11-May-2020 13:21:04] ERROR [CurrencyExngApp.views:282] ConvertCurrencyAPI: expected string or bytes-like object at 272
+[11-May-2020 13:26:48] ERROR [CurrencyExngApp.views:438] SaveProfileAPI: 'str' object has no attribute 'name' at 422
+[11-May-2020 13:27:27] ERROR [CurrencyExngApp.views:438] SaveProfileAPI: 'str' object has no attribute 'name' at 422
+[11-May-2020 13:29:43] ERROR [CurrencyExngApp.views:438] SaveProfileAPI: Unsupported media type "image/jpeg" in request. at 404
+[11-May-2020 13:33:47] ERROR [CurrencyExngApp.views:438] SaveProfileAPI: 'str' object has no attribute 'name' at 422
+[11-May-2020 13:35:15] ERROR [CurrencyExngApp.views:438] SaveProfileAPI: 'str' object has no attribute 'read' at 422
+[11-May-2020 13:40:10] ERROR [CurrencyExngApp.views:441] SaveProfileAPI: name 'image_name' is not defined at 422
+[11-May-2020 13:40:13] ERROR [CurrencyExngApp.views:441] SaveProfileAPI: name 'image_name' is not defined at 422

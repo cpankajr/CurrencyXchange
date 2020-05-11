@@ -8,13 +8,15 @@ urlpatterns = [
     url(r'^authentication/', views.LoginSubmit),  # Authentication
     url(r'^register/', views.SignUp),  # Authentication
 
-    url(r'^home/', views.HomePage), #Home Page
-    url(r'^profile/', views.Profile), #Profile Page
+    url(r'^home/$', views.HomePage), # Home Page
+    url(r'^$', views.RedirecttoHome), # Redirect to Home Page
+    url(r'^profile/', views.Profile), # Profile Page
     
-    url(r'^create-wallet/', views.CreateWallet), #Create Wallet
-    url(r'^add-money-to-wallet/', views.AddMoney), #Add Money to Wallet API
-    url(r'^send-money-to-user/', views.SendMoney), #Send Money to User API
-    url(r'^convert-currency/', views.ConvertCurrency), #Convert Currency API
+    url(r'^create-wallet/', views.CreateWallet), # Create Wallet
+    url(r'^add-money-to-wallet/', views.AddMoney), # Add Money to Wallet API
+    url(r'^send-money-to-user/', views.SendMoney), # Send Money to User API
+    url(r'^convert-currency/', views.ConvertCurrency), # Convert Currency API
+    url(r'^read-wallet/', views.ReadWallet), #Read Wallent Balance API
 
     url(r'^save-profile/', views.SaveProfile), #Save Profile Data
 ]

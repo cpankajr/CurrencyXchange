@@ -61,6 +61,9 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
         return
 
 
+def RedirecttoHome(request):
+    return HttpResponseRedirect("/home")
+
 def HomePage(request):
     if request.user.is_authenticated():
         wallet_objs = Wallet.objects.filter(user=request.user)
@@ -116,6 +119,8 @@ class LoginSubmitAPI(APIView):
 
         response = {}
         response['status'] = 500
+        response['message'] = "Error"
+
         try:
 
             data = request.data
@@ -127,13 +132,16 @@ class LoginSubmitAPI(APIView):
 
             if len(User.objects.filter(username=username)) == 0:
                 response['status'] = 301
+                response['message'] = "No user found"
             else:
                 try:
                     user = authenticate(username=username, password=password)
                     login(request, user)
                     response['status'] = 200
+                    response['message'] = "Success"
                 except Exception as e:
                     response['status'] = 302
+                    response['message'] = "Wrong password"
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("LoginSubmitAPI: %s at %s", e, str(exc_tb.tb_lineno))
@@ -150,6 +158,7 @@ class SignUpAPI(APIView):
 
         response = {}
         response['status'] = 500
+        response['message'] = "Error"
         try:
 
             data = request.data
@@ -160,9 +169,11 @@ class SignUpAPI(APIView):
             password = removeHtmlFromString(password)
             if len(User.objects.filter(username=username)) > 0:
                 response['status'] = 301
+                response['message'] = "Username already exist"
             else:
                 User.objects.create(username=username, password=password)
                 response['status'] = 200
+                response['message'] = "Success"
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("SignUpAPI: %s at %s", e, str(exc_tb.tb_lineno))
@@ -179,6 +190,7 @@ class CreateWalletAPI(APIView):
 
         response = {}
         response['status'] = 500
+        response['message'] = "Error"
         try:
 
             data = request.data
@@ -191,12 +203,47 @@ class CreateWalletAPI(APIView):
             user = User.objects.get(username=username)
             if len(Wallet.objects.filter(user=user)) > 0:
                 response['status'] = 301
+                response['message'] = "Wallet already created."
             else:
                 Wallet.objects.create(user=user, currency_code=currency_code)
                 response['status'] = 200
+                response['message'] = "Success"
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("CreateWalletAPI: %s at %s", e, str(exc_tb.tb_lineno))
+
+        return Response(data=response)
+
+class ReadWalletAPI(APIView):
+
+    authentication_classes = (
+        CsrfExemptSessionAuthentication, BasicAuthentication)
+
+    def post(self, request, *args, **kwargs):
+
+        response = {}
+        response['status'] = 500
+        response['message'] = "Error"
+        try:
+
+            data = request.data
+
+            username = data['username']
+            username = removeHtmlFromString(username)
+
+            if len(User.objects.filter(username=username)) > 0:
+                user_obj = User.objects.filter(username=username)[0]
+                wallet_obj = Wallet.objects.get(user=user_obj)
+
+                response['wallet_balance'] = wallet_obj.get_amount_string()
+                response['status'] = 200
+                response['message'] = "Success"
+            else:
+                response['status'] = 301
+                response['message'] = "Username not exist"
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            logger.error("ReadWalletAPI: %s at %s", e, str(exc_tb.tb_lineno))
 
         return Response(data=response)
 
@@ -210,6 +257,7 @@ class ConvertCurrencyAPI(APIView):
 
         response = {}
         response['status'] = 500
+        response['message'] = "Error"
         try:
 
             data = request.data
@@ -227,6 +275,7 @@ class ConvertCurrencyAPI(APIView):
             if converted_amount is not None:
                 response['converted_amount'] = converted_amount
             response['status'] = 200
+            response['message'] = "Success"
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("ConvertCurrencyAPI: %s at %s",
@@ -244,6 +293,7 @@ class SendMoneyAPI(APIView):
 
         response = {}
         response['status'] = 500
+        response['message'] = "Error"
         try:
 
             data = request.data
@@ -264,6 +314,7 @@ class SendMoneyAPI(APIView):
                 sending_wallet_obj = Wallet.objects.get(user=sending_user)
                 if float(amount) > sending_wallet_obj.amount:
                     response['status'] = 302
+                    response['message'] = "Sent amount greater than wallet amount"
                 else:
                     try:
                         recieving_wallet_obj = Wallet.objects.get(
@@ -287,11 +338,14 @@ class SendMoneyAPI(APIView):
                         Transaction.objects.create(sent_user=sending_user, sent_curr_code=from_currency_code, sent_amount=amount,
                                                    recieved_user=recieving_user, recieved_curr_code=to_currency_code, recieved_amount=converted_amount)
                         response['status'] = 200
+                        response['message'] = "Success"
                     else:
                         response['status'] = 303
+                        response['message'] = "Recieving user not found"
 
             else:
                 response['status'] = 301
+                response['message'] = "Username not found"
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("SendMoneyAPI: %s at %s", e, str(exc_tb.tb_lineno))
@@ -308,6 +362,7 @@ class AddMoneyAPI(APIView):
 
         response = {}
         response['status'] = 500
+        response['message'] = "Error"
         try:
 
             data = request.data
@@ -326,6 +381,7 @@ class AddMoneyAPI(APIView):
             Transaction.objects.create(
                 sent_user=user, sent_curr_code=wallet_obj.currency_code, sent_amount=amount)
             response['status'] = 200
+            response['message'] = "Success"
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("AddMoneyAPI: %s at %s", e, str(exc_tb.tb_lineno))
@@ -342,6 +398,7 @@ class SaveProfileAPI(APIView):
 
         response = {}
         response['status'] = 500
+        response['message'] = "Error"
         try:
 
             data = request.data
@@ -362,7 +419,10 @@ class SaveProfileAPI(APIView):
 
             user_obj = User.objects.get(username=username)
             if image_data != "":
-                file_path = save_image(image_data)
+                if "image_name" in data:
+                    file_path = save_image(image_data,data["image_name"])
+                else:
+                    file_path = save_image(image_data)
 
                 if file_path is None:
                     response['status'] = 301
@@ -375,6 +435,7 @@ class SaveProfileAPI(APIView):
             user_obj.save()
 
             response['status'] = 200
+            response['message'] = "Success"
         except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             logger.error("SaveProfileAPI: %s at %s", e, str(exc_tb.tb_lineno))
@@ -388,3 +449,4 @@ SendMoney = SendMoneyAPI.as_view()
 CreateWallet = CreateWalletAPI.as_view()
 ConvertCurrency = ConvertCurrencyAPI.as_view()
 SaveProfile = SaveProfileAPI.as_view()
+ReadWallet = ReadWalletAPI.as_view()
