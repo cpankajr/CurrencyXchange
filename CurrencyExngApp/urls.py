@@ -17,6 +17,8 @@ urlpatterns = [
     url(r'^send-money-to-user/', views.SendMoney), # Send Money to User API
     url(r'^convert-currency/', views.ConvertCurrency), # Convert Currency API
     url(r'^read-wallet/', views.ReadWallet), #Read Wallent Balance API
+    url(r'^get-analytics/', views.GetAnalytics), #Read Get Analytics API
+    url(r'^get-overall-analytics/', views.GetOverallAnalytics), #Read Get Analytics API
 
     url(r'^save-profile/', views.SaveProfile), #Save Profile Data
 ]

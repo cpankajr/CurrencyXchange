@@ -24,34 +24,34 @@ from CurrencyExngApp.utils import *
 logger = logging.getLogger(__name__)
 
 SUPPORTED_CURRENCIES = {'EUR': 'EUR (€) (European Euro)',
-                        'IDR': 'IDR (Rp) (Indonesian rupiah)', 
-                        'BGN': 'BGN (BGN) (Bulgarian lev)', 
-                        'ILS': 'ILS (₪) (Israeli new sheqel)', 
-                        'GBP': 'GBP (£) (British pound)', 
-                        'DKK': 'DKK (Kr) (Danish krone)', 
-                        'CAD': 'CAD ($) (Canadian dollar)', 
-                        'JPY': 'JPY (¥) (Japanese yen)', 
-                        'HUF': 'HUF (Ft) (Hungarian forint)', 
-                        'RON': 'RON (L) (Romanian leu)', 
-                        'MYR': 'MYR (RM) (Malaysian ringgit)', 
-                        'SEK': 'SEK (kr) (Swedish krona)', 
-                        'SGD': 'SGD (S$) (Singapore dollar)', 
-                        'HKD': 'HKD (HK$) (Hong Kong dollar)', 
+                        'IDR': 'IDR (Rp) (Indonesian rupiah)',
+                        'BGN': 'BGN (BGN) (Bulgarian lev)',
+                        'ILS': 'ILS (₪) (Israeli new sheqel)',
+                        'GBP': 'GBP (£) (British pound)',
+                        'DKK': 'DKK (Kr) (Danish krone)',
+                        'CAD': 'CAD ($) (Canadian dollar)',
+                        'JPY': 'JPY (¥) (Japanese yen)',
+                        'HUF': 'HUF (Ft) (Hungarian forint)',
+                        'RON': 'RON (L) (Romanian leu)',
+                        'MYR': 'MYR (RM) (Malaysian ringgit)',
+                        'SEK': 'SEK (kr) (Swedish krona)',
+                        'SGD': 'SGD (S$) (Singapore dollar)',
+                        'HKD': 'HKD (HK$) (Hong Kong dollar)',
                         'AUD': 'AUD ($) (Australian dollar)',
-                        'CHF': 'CHF (Fr.) (Swiss franc)', 
-                        'TRY': 'TRY (TRY) (Turkish new lira)', 
-                        'HRK': 'HRK (kn) (Croatian kuna)', 
-                        'NZD': 'NZD (NZ$) (New Zealand dollar)', 
-                        'THB': 'THB (฿) (Thai baht)', 
-                        'USD': 'USD (US$) (United States dollar)', 
-                        'NOK': 'NOK (kr) (Norwegian krone)', 
-                        'RUB': 'RUB (R) (Russian ruble)', 
-                        'INR': 'INR (₹) (Indian rupee)', 
-                        'MXN': 'MXN ($) (Mexican peso)', 
-                        'CZK': 'CZK (Kč) (Czech koruna)', 
-                        'BRL': 'BRL (R$) (Brazilian real)', 
-                        'PLN': 'PLN (zł) (Polish zloty)', 
-                        'PHP': 'PHP (₱) (Philippine peso)', 
+                        'CHF': 'CHF (Fr.) (Swiss franc)',
+                        'TRY': 'TRY (TRY) (Turkish new lira)',
+                        'HRK': 'HRK (kn) (Croatian kuna)',
+                        'NZD': 'NZD (NZ$) (New Zealand dollar)',
+                        'THB': 'THB (฿) (Thai baht)',
+                        'USD': 'USD (US$) (United States dollar)',
+                        'NOK': 'NOK (kr) (Norwegian krone)',
+                        'RUB': 'RUB (R) (Russian ruble)',
+                        'INR': 'INR (₹) (Indian rupee)',
+                        'MXN': 'MXN ($) (Mexican peso)',
+                        'CZK': 'CZK (Kč) (Czech koruna)',
+                        'BRL': 'BRL (R$) (Brazilian real)',
+                        'PLN': 'PLN (zł) (Polish zloty)',
+                        'PHP': 'PHP (₱) (Philippine peso)',
                         'ZAR': 'ZAR (R) (South African rand)'}
 
 
@@ -63,6 +63,7 @@ class CsrfExemptSessionAuthentication(SessionAuthentication):
 
 def RedirecttoHome(request):
     return HttpResponseRedirect("/home")
+
 
 def HomePage(request):
     if request.user.is_authenticated():
@@ -213,6 +214,7 @@ class CreateWalletAPI(APIView):
             logger.error("CreateWalletAPI: %s at %s", e, str(exc_tb.tb_lineno))
 
         return Response(data=response)
+
 
 class ReadWalletAPI(APIView):
 
@@ -420,7 +422,7 @@ class SaveProfileAPI(APIView):
             user_obj = User.objects.get(username=username)
             if image_data != "":
                 if "image_name" in data:
-                    file_path = save_image(image_data,data["image_name"])
+                    file_path = save_image(image_data, data["image_name"])
                 else:
                     file_path = save_image(image_data)
 
@@ -442,7 +444,144 @@ class SaveProfileAPI(APIView):
 
         return Response(data=response)
 
+
+class GetAnalyticsAPI(APIView):
+
+    authentication_classes = (
+        CsrfExemptSessionAuthentication, BasicAuthentication)
+
+    def post(self, request, *args, **kwargs):
+
+        response = {}
+        response['status'] = 500
+        response['message'] = "Error"
+        try:
+
+            data = request.data
+
+            start_datetime = data['start_date']
+            start_datetime = datetime.datetime.strptime(
+                start_datetime, '%d-%m-%Y')
+
+            end_datetime = data['end_date']
+            end_datetime = datetime.datetime.strptime(end_datetime, '%d-%m-%Y')
+
+            username = data['username']
+
+            user_obj = User.objects.get(username=username)
+            transaction_objs = Transaction.objects.filter(
+                date__date__gte=start_datetime, date__date__lte=end_datetime, sent_user=user_obj).filter(~Q(recieved_user=None))
+
+            overrall_transaction = 0
+            all_details = []
+            for transaction_obj in transaction_objs:
+                from_currency_code = transaction_obj.sent_curr_code
+                to_currency_code = transaction_obj.recieved_curr_code
+                amount = transaction_obj.sent_amount
+                sent_amount = transaction_obj.recieved_amount
+                converted_amount = currency_convert(
+                    from_currency_code, to_currency_code, amount)
+
+                transaction_in_user_currency = currency_convert(
+                    to_currency_code, from_currency_code, sent_amount - converted_amount)
+                overrall_transaction += transaction_in_user_currency
+                all_details.append({
+                    "from_currency_code": from_currency_code,
+                    "to_currency_code": to_currency_code,
+                    "datetime": transaction_obj.date.strftime("%d-%m-%Y, %H:%M:%S"),
+                    "amount_sent": amount,
+                    "amount_after_coversion_while_transaction": sent_amount,
+                    "amount_after_coversion_now": converted_amount,
+                    "profitable_transaction": transaction_in_user_currency > 0,
+                })
+            if overrall_transaction < 0:
+                response["type"] = "loss"
+                response["amount"] = overrall_transaction
+                response["all_details"] = all_details
+            elif overrall_transaction > 0:
+                response["type"] = "profit"
+                response["amount"] = overrall_transaction
+                response["all_details"] = all_details
+            else:
+                response["type"] = "breakeven"
+                response["amount"] = overrall_transaction
+                response["all_details"] = all_details
+            response['status'] = 200
+            response['message'] = "Success"
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            logger.error("GetAnalyticsAPI: %s at %s",
+                         e, str(exc_tb.tb_lineno))
+
+        return Response(data=response)
+
+
+class GetOverallAnalyticsAPI(APIView):
+
+    authentication_classes = (
+        CsrfExemptSessionAuthentication, BasicAuthentication)
+
+    def post(self, request, *args, **kwargs):
+
+        response = {}
+        response['status'] = 500
+        response['message'] = "Error"
+        try:
+
+            data = request.data
+
+            username = data['username']
+
+            user_obj = User.objects.get(username=username)
+
+            if user_obj.is_staff:
+                start_datetime = data['start_date']
+                start_datetime = datetime.datetime.strptime(
+                    start_datetime, '%d-%m-%Y')
+
+                end_datetime = data['end_date']
+                end_datetime = datetime.datetime.strptime(
+                    end_datetime, '%d-%m-%Y')
+
+                transaction_objs = Transaction.objects.filter(
+                    date__date__gte=start_datetime, date__date__lte=end_datetime)
+                analytics = {}
+                days = ["Monday", "Tuesday", "Wednesday",
+                        "Thursday", "Friday", "Saturday", "Sunday"]
+                all_details = []
+                for i in range(7):
+                    txn_objs = transaction_objs.filter(date__date__week_day=i)
+                    analytics[days[i]] = 0
+                    for transaction_obj in txn_objs:
+                        from_currency_code = transaction_obj.sent_curr_code
+                        sent_amount = transaction_obj.sent_amount
+                        transaction_amnt_in_usd = currency_convert(
+                            from_currency_code, 'usd', sent_amount)
+                        converted_amount = transaction_amnt_in_usd
+                        analytics[days[i]] += converted_amount
+                        all_details.append({
+                            "amount_sent": transaction_amnt_in_usd,
+                            "datetime": transaction_obj.date.strftime("%d-%m-%Y, %H:%M:%S"),
+                        })
+
+                response['analytics'] = analytics
+                response['all_details'] = all_details
+                response['status'] = 200
+                response['message'] = "Success"
+            else:
+                response['status'] = 403
+                response['message'] = "You are not autherized to this api"
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            logger.error("GetOverallAnalyticsAPI: %s at %s",
+                         e, str(exc_tb.tb_lineno))
+
+        return Response(data=response)
+
+
 LoginSubmit = LoginSubmitAPI.as_view()
+GetAnalytics = GetAnalyticsAPI.as_view()
+GetOverallAnalytics = GetOverallAnalyticsAPI.as_view()
 SignUp = SignUpAPI.as_view()
 AddMoney = AddMoneyAPI.as_view()
 SendMoney = SendMoneyAPI.as_view()
