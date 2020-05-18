@@ -18,7 +18,7 @@ Instructions Tested on Ubuntu 18.04 and python3.7
 - Pages:
   - Login Page
   - Signup Page
-  - Home Page (Currency conversion, Send & Add Money, Create Wallet, Recent Transaction and Download Reciept, Wallet Analytics(*not finished*))
+  - Home Page (Currency conversion, Send & Add Money, Create Wallet, Recent Transaction and Download Reciept)
   - Profile Page (Profile Pic and other details)
 
 Screens:
