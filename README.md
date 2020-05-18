@@ -1,4 +1,5 @@
 # CurrencyXchange
+Screens are present in images folder fel free to see them.
 
 Instructions Tested on Ubuntu 18.04 and python3.7
 
@@ -21,4 +22,4 @@ Instructions Tested on Ubuntu 18.04 and python3.7
   - Home Page (Currency conversion, Send & Add Money, Create Wallet, Recent Transaction and Download Reciept)
   - Profile Page (Profile Pic and other details)
 
-Screens:
+   
