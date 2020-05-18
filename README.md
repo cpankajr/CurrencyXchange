@@ -1,5 +1,6 @@
 # CurrencyXchange
-Screens are present in images folder fel free to see them.
+
+*Screen images of project are present in images folder feel free to explore them.*
 
 Instructions Tested on Ubuntu 18.04 and python3.7
 
