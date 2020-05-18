@@ -8,8 +8,7 @@
    - Profit/Loss Calculation
       - example: 
          - user X(wallet($)) sends money $2 to user Y(wallet(INR)); user Y will recieve INR 100 (given 1 USD= 50 INR )
-         - when you check for order analytics on next day (when 1 USD = 100 INR ) then for user X it will be loss of 1 USD
-      
+         - when you check for order analytics on next day (when 1 USD = 100 INR ) then for user X it will be loss of 1 USD for that transaction
 
 Instructions Tested on Ubuntu 18.04 and python3.7
 
