@@ -14,7 +14,7 @@ Instructions Tested on Ubuntu 18.04 and python3.7
 
 - Run Project: ```python manage.py runserver```
 
-
+- To run test case: ```python manage.py test CurrencyExngApp/tests/```
 - Pages:
   - Login Page
   - Signup Page
